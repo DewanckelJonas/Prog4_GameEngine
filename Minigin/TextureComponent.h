@@ -12,7 +12,7 @@ namespace dae
 		TextureComponent(const std::string& filePath);
 		~TextureComponent() = default;
 		void Initialize() override{};
-		void Update(float elapsedSec) override { UNREFERENCED_PARAMETER(elapsedSec); }
+		void Update(float) override {}
 		void Render() const override;
 
 	private:

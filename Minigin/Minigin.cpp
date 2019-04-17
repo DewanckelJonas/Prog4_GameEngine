@@ -59,7 +59,7 @@ void dae::Minigin::LoadGame() const
 	std::shared_ptr<Font> font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	auto pTextComponent = new TextComponent("Programming 4 Assignment", font);
 	pTextObject->AddComponent(pTextComponent);
-	pTextObject->SetPosition(80, 20, 0);
+	pTextObject->SetPosition(80, 20, 0); 
 	scene.Add(pTextObject);
 
 	auto pFPSObject = new GameObject();
@@ -108,10 +108,11 @@ void dae::Minigin::Run()
 
 			while (accuTime >= msPerUpdate)
 			{
-				sceneManager.Update(msPerUpdate);
+				sceneManager.FixedUpdate(msPerUpdate);
 				accuTime -= msPerUpdate;
 			}
 
+			sceneManager.Update(deltaTime);
 			renderer.Render();
 
 		}

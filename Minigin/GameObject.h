@@ -13,10 +13,6 @@ namespace dae
 		void Render() const;
 		void AddComponent(BaseComponent* pComponent);
 
-		void SetPosition(float x, float y, float z) { m_Transform.m_Position = glm::vec3(x, y, z); }
-		glm::vec3 GetPosition() const { return m_Transform.m_Position; }
-
-
 		template<class T>
 		T* GetComponent()
 		{
@@ -25,11 +21,6 @@ namespace dae
 			{
 				if (pComponent && typeid(*pComponent) == ti)
 					return static_cast<T*>(pComponent);
-
-				//does not work for some reason
-				/*T* pCastedComponent = std::dynamic_pointer_cast<T>(pComponent);
-				if (pCastedComponent)
-					return pCastedComponent;*/
 			}
 			return nullptr;
 		}
@@ -44,7 +35,6 @@ namespace dae
 
 	private:
 
-		Transform m_Transform;
 		std::vector<BaseComponent*> m_pComponents;
 	};
 }

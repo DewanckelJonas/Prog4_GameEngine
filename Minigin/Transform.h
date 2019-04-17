@@ -6,6 +6,6 @@
 
 struct Transform
 {
-	glm::vec3 m_Position;
+	glm::vec3 Position;
 };
 

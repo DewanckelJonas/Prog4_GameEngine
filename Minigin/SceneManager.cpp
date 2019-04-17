@@ -3,6 +3,10 @@
 #include "Scene.h"
 
 
+void dae::SceneManager::FixedUpdate(float deltaTime)
+{
+}
+
 void dae::SceneManager::Update(float deltaTime)
 {
 	for(auto scene : mScenes)
