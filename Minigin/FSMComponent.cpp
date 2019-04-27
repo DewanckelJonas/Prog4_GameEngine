@@ -5,7 +5,7 @@
 
 void dae::FSMComponent::Update(float deltaTime)
 {
-	IState* pNewState = m_pState->Update(GetGameObject, deltaTime);
+	IState* pNewState = m_pState->Update(GetGameObject(), deltaTime);
 	if (pNewState != nullptr)
 	{
 		m_pState->Exit(GetGameObject());
