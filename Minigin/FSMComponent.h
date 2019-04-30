@@ -3,10 +3,12 @@
 namespace dae
 {
 	class IState;
+	//finite state machine component
 	class FSMComponent final : public BaseComponent
 	{
 	public:
 		FSMComponent(IState* startingState) :m_pState(startingState) {};
+		~FSMComponent() { delete m_pState; }
 		void Initialize() override{};
 		void Update(float deltaTime) override;
 		void Render() const override {};

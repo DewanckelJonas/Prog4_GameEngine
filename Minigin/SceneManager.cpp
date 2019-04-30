@@ -3,29 +3,29 @@
 #include "Scene.h"
 
 
+void dae::SceneManager::AddScene(Scene * pScene, const std::string & name)
+{
+	if (!m_spScenes[name])
+	{
+		std::cout << "Error Scene with that name already exists" << std::endl;
+		return;
+	}
+	m_spScenes[name] = std::shared_ptr<Scene>(pScene);
+	if (!m_spCurrentScene)
+		m_spCurrentScene = m_spScenes[name];
+}
+
 void dae::SceneManager::FixedUpdate(float deltaTime)
 {
 }
 
 void dae::SceneManager::Update(float deltaTime)
 {
-	for(auto scene : mScenes)
-	{
-		scene->Update(deltaTime);
-	}
+	m_spCurrentScene->Update(deltaTime);
 }
 
 void dae::SceneManager::Render()
 {
-	for (const auto scene : mScenes)
-	{
-		scene->Render();
-	}
+	m_spCurrentScene->Render();
 }
 
-dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
-{
-	const auto scene = std::shared_ptr<Scene>(new Scene(name));
-	mScenes.push_back(scene);
-	return *scene;
-}
