@@ -6,8 +6,9 @@ namespace dae
 	class GameObject;
 	class Scene
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
+		
 	public:
+		explicit Scene(const std::string& name);
 		void Add(GameObject* object);
 
 		void Update(float deltaTime);
@@ -20,7 +21,6 @@ namespace dae
 		Scene& operator=(Scene&& other) = delete;
 
 	private: 
-		explicit Scene(const std::string& name);
 
 		std::string mName{};
 		std::vector <GameObject*> mObjects{};
