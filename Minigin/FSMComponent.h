@@ -8,7 +8,7 @@ namespace dae
 	{
 	public:
 		FSMComponent(IState* startingState) :m_pState(startingState) {};
-		~FSMComponent() { delete m_pState; }
+		~FSMComponent();
 		void Initialize() override{};
 		void Update(float deltaTime) override;
 		void Render() const override {};

@@ -7,12 +7,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
-#include "TextComponent.h"
-#include "FPSComponent.h"
-#include "GameObject.h"
-#include "Scene.h"
-#include "TextureComponent.h"
-
+#include "DigDugScene.h"
 
 void dae::Minigin::Initialize()
 {
@@ -42,33 +37,7 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
-
-	auto pBackGroundGameObject = new GameObject();
-	auto pBackGroundTextureComp = new TextureComponent("background.jpg");
-	pBackGroundGameObject->AddComponent(pBackGroundTextureComp);
-	scene.Add(pBackGroundGameObject);
-
-	auto pLogoObject = new GameObject();
-	auto pLogoTextureComp = new TextureComponent("logo.png");
-	pLogoObject->AddComponent(pLogoTextureComp);
-	pLogoObject->SetPosition(216, 180, 0);
-	scene.Add(pLogoObject);
-
-	auto pTextObject = new GameObject();
-	std::shared_ptr<Font> font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto pTextComponent = new TextComponent("Programming 4 Assignment", font);
-	pTextObject->AddComponent(pTextComponent);
-	pTextObject->SetPosition(80, 20, 0); 
-	scene.Add(pTextObject);
-
-	auto pFPSObject = new GameObject();
-	auto pFPSComponent = new FPSComponent();
-	pTextComponent = new TextComponent("60", font, {255, 255, 0});
-	pFPSObject->AddComponent(pFPSComponent);
-	pFPSObject->AddComponent(pTextComponent);
-	scene.Add(pFPSObject);
-
+	SceneManager::GetInstance().AddScene(new DigDugScene(), "DigDugScene");
 }
 
 void dae::Minigin::Cleanup()
@@ -93,6 +62,7 @@ void dae::Minigin::Run()
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
 
+		sceneManager.Initialize();
 		auto prevFrameTime = std::chrono::high_resolution_clock::now();
 		float accuTime = 0.f;
 		const float msPerUpdate = 1.f/60.f;
@@ -111,8 +81,8 @@ void dae::Minigin::Run()
 				sceneManager.FixedUpdate(msPerUpdate);
 				accuTime -= msPerUpdate;
 			}
-
 			sceneManager.Update(deltaTime);
+
 			renderer.Render();
 
 		}

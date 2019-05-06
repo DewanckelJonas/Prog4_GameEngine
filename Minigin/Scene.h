@@ -11,10 +11,11 @@ namespace dae
 		explicit Scene(const std::string& name);
 		void Add(GameObject* object);
 
-		void Update(float deltaTime);
-		void Render() const;
+		virtual void Initialize();
+		virtual void Update(float deltaTime);
+		virtual void Render() const;
 
-		~Scene();
+		virtual ~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
 		Scene& operator=(const Scene& other) = delete;

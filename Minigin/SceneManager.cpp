@@ -5,7 +5,7 @@
 
 void dae::SceneManager::AddScene(Scene * pScene, const std::string & name)
 {
-	if (!m_spScenes[name])
+	if (m_spScenes[name] != nullptr)
 	{
 		std::cout << "Error Scene with that name already exists" << std::endl;
 		return;
@@ -15,7 +15,12 @@ void dae::SceneManager::AddScene(Scene * pScene, const std::string & name)
 		m_spCurrentScene = m_spScenes[name];
 }
 
-void dae::SceneManager::FixedUpdate(float deltaTime)
+void dae::SceneManager::Initialize()
+{
+	m_spCurrentScene->Initialize();
+}
+
+void dae::SceneManager::FixedUpdate(float)
 {
 }
 

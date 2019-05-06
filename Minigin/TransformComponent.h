@@ -1,15 +1,39 @@
 #pragma once
 #include "BaseComponent.h"
 #include "Transform.h"
+#include "BaseCommand.h"
 
-class TransformComponent : public BaseComponent
+namespace dae
 {
-public:
-	TransformComponent(){};
-	void SetPosition(const glm::vec3& pos) { m_Transform.Position = pos; }
-	glm::vec3 GetPosition() { return m_Transform.Position; }
 
-private:
-	Transform m_Transform{};
-};
+	class TransformComponent : public BaseComponent
+	{
+	public:
+		TransformComponent(const glm::vec3& pos){ m_Transform.Position = pos; };
+		void SetPosition(const glm::vec3& pos) { m_Transform.Position = pos; }
+		glm::vec3 GetPosition() { return m_Transform.Position; }
+		void Translate(const glm::vec3& translation) { m_Transform.Position += translation; }
+
+
+		virtual void Initialize() override {};
+		virtual void Update(float) override {};
+		virtual void Render() const override {};
+
+	private:
+		Transform m_Transform{};
+	};
+
+	class MoveCmd : public BaseCommand
+	{
+	public:
+		MoveCmd(glm::vec3 direction, float speed) : m_Direction(direction), m_Speed(speed) {}
+		void Execute() override { GetActor()->GetComponent<TransformComponent>()->Translate(m_Speed * m_Direction); }
+
+	private:
+		float m_Speed;
+		glm::vec3 m_Direction;
+	};
+}
+
+
 

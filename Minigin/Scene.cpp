@@ -1,6 +1,8 @@
 #include "MiniginPCH.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "InputManager.h"
+#include "BaseCommand.h"
 
 unsigned int dae::Scene::idCounter = 0;
 
@@ -19,8 +21,24 @@ void dae::Scene::Add(GameObject* object)
 	mObjects.push_back(object);
 }
 
+
+void dae::Scene::Initialize()
+{
+	for (auto gameObject : mObjects)
+	{
+		gameObject->Initialize();
+	}
+}
+
 void dae::Scene::Update(float deltaTime)
 {
+	InputManager* pInputManager = &InputManager::GetInstance();
+	size_t nrOfControllers = pInputManager->GetMaxNrOfControllers();
+	for (size_t i = 0; i < nrOfControllers; i++)
+	{
+		BaseCommand* pCommand = pInputManager->HandleInput(i);
+		if (pCommand) { pCommand->Execute(); }
+	}
 	for(auto gameObject : mObjects)
 	{
 		gameObject->Update(deltaTime);

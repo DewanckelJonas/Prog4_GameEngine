@@ -3,6 +3,11 @@
 #include "IState.h"
 
 
+dae::FSMComponent::~FSMComponent()
+{
+	delete m_pState;
+}
+
 void dae::FSMComponent::Update(float deltaTime)
 {
 	IState* pNewState = m_pState->Update(GetGameObject(), deltaTime);

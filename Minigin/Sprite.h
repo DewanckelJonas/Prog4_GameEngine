@@ -16,7 +16,7 @@ namespace dae
 		{}
 
 		int GetRows() const { return m_NrOfRows; }
-		int GetCols() const { m_NrOfCols; }
+		int GetCols() const { return m_NrOfCols; }
 		std::shared_ptr<Texture2D> GetTexture() const { return m_spTexture; };
 	};
 }

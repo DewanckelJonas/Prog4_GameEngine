@@ -10,6 +10,7 @@ namespace dae
 	public:
 		void AddScene(Scene* pScene, const std::string& name);
 
+		void Initialize();
 		void FixedUpdate(float deltaTime);
 		void Update(float deltaTime);
 		void Render();

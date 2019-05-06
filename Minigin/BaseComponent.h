@@ -15,6 +15,8 @@ public:
 	virtual void Render() const = 0;
 	dae::GameObject* GetGameObject() const { return m_GameObject; };
 
+	friend void dae::GameObject::AddComponent(BaseComponent* pComponent);
+
 private:
 	dae::GameObject* m_GameObject{nullptr};
 };

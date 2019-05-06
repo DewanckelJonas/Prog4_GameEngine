@@ -14,8 +14,9 @@ dae::SpriteComponent::SpriteComponent(const std::string & filePath, int nrOfRows
 {
 }
 
-void dae::SpriteComponent::Update(float elapsedSec)
+void dae::SpriteComponent::Update(float deltaTime)
 {
+	m_ElapsedSec += deltaTime;
 	if (m_ElapsedSec > m_FrameTime)
 	{
 		m_ElapsedSec -= m_FrameTime;
@@ -27,14 +28,14 @@ void dae::SpriteComponent::Update(float elapsedSec)
 void dae::SpriteComponent::Render() const
 {
 	glm::vec3 pos = GetGameObject()->GetComponent<TransformComponent>()->GetPosition();
-	Rect targetRect{ {pos.x, pos.y }, GetWidth(), GetHeight() };
 	Rect sourceRect;
-	int currentRow{ m_CurrentFrame / m_Sprite.GetRows() };
-	int currentCol{ m_CurrentFrame % m_Sprite.GetCols };
-	sourceRect.width = m_Sprite.GetTexture()->GetWidth() / m_Sprite.GetCols();
-	sourceRect.height = m_Sprite.GetTexture()->GetHeight() / m_Sprite.GetRows();
-	sourceRect.pos.x = m_Sprite.GetTexture()->GetWidth() * currentCol;
-	sourceRect.pos.y = m_Sprite.GetTexture()->GetHeight()*(m_Sprite.GetCols() - 1 - currentCol);
+	int currentRow{ m_CurrentFrame / m_Sprite.GetCols() };
+	int currentCol{ m_CurrentFrame % m_Sprite.GetCols() };
+	sourceRect.width = m_Sprite.GetTexture()->GetWidth() / float(m_Sprite.GetCols());
+	sourceRect.height = float(m_Sprite.GetTexture()->GetHeight()) / m_Sprite.GetRows();
+	sourceRect.pos.x = sourceRect.width * currentCol;
+	sourceRect.pos.y = sourceRect.height*(m_Sprite.GetRows() - 1 - currentRow);
+	Rect targetRect{ {pos.x, pos.y }, sourceRect.width, sourceRect.height };
 	Renderer::GetInstance().RenderTexture(*m_Sprite.GetTexture(), targetRect, sourceRect);
 }
 

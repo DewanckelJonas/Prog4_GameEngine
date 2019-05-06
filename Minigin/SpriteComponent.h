@@ -2,6 +2,7 @@
 #include "BaseComponent.h"
 #include "Sprite.h"
 
+#pragma warning(push)
 #pragma warning (disable:4201)
 #include <glm/vec2.hpp>
 #pragma warning(pop)
@@ -16,8 +17,8 @@ namespace dae
 		void Update(float elapsedSec) override;
 		void Render() const override;
 
-		int GetWidth() const { m_Sprite.GetTexture()->GetWidth(); };
-		int GetHeight() const { m_Sprite.GetTexture()->GetHeight(); };
+		int GetWidth() const { return m_Sprite.GetTexture()->GetWidth(); };
+		int GetHeight() const { return m_Sprite.GetTexture()->GetHeight(); };
 		glm::vec2 GetScale() const { return m_Scale; }
 		void SetScale(const glm::vec2& scale) { m_Scale = scale; }
 
