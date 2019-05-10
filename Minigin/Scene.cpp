@@ -36,8 +36,8 @@ void dae::Scene::Update(float deltaTime)
 	size_t nrOfControllers = pInputManager->GetMaxNrOfControllers();
 	for (size_t i = 0; i < nrOfControllers; i++)
 	{
-		BaseCommand* pCommand = pInputManager->HandleInput(i);
-		if (pCommand) { pCommand->Execute(); }
+		auto spCommand = pInputManager->HandleInput(i);
+		if (spCommand) { spCommand->Execute(); }
 	}
 	for(auto gameObject : mObjects)
 	{

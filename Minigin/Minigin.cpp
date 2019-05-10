@@ -30,6 +30,7 @@ void dae::Minigin::Initialize()
 	}
 
 	Renderer::GetInstance().Init(window);
+	InputManager::GetInstance().Initialize();
 }
 
 /**

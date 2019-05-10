@@ -1,14 +1,17 @@
-﻿  InputManager.cpp
-  Minigin.vcxproj -> E:\Programming 4\GameEngine\Win32\Debug\Minigin.exe
-  E:\Programming 4\GameEngine\3rdParty\SDL2\lib\x86\SDL2.dll
-  1 File(s) copied
-  E:\Programming 4\GameEngine\3rdParty\SDL2_image\lib\x86\libjpeg-9.dll
-  E:\Programming 4\GameEngine\3rdParty\SDL2_image\lib\x86\libpng16-16.dll
-  E:\Programming 4\GameEngine\3rdParty\SDL2_image\lib\x86\libtiff-5.dll
-  E:\Programming 4\GameEngine\3rdParty\SDL2_image\lib\x86\libwebp-7.dll
-  E:\Programming 4\GameEngine\3rdParty\SDL2_image\lib\x86\SDL2_image.dll
-  E:\Programming 4\GameEngine\3rdParty\SDL2_image\lib\x86\zlib1.dll
-  6 File(s) copied
-  E:\Programming 4\GameEngine\3rdParty\SDL2_ttf\lib\x86\libfreetype-6.dll
-  E:\Programming 4\GameEngine\3rdParty\SDL2_ttf\lib\x86\SDL2_ttf.dll
-  2 File(s) copied
+﻿  CollisionSystem.cpp
+e:\programming 4\gameengine\minigin\collisionsystem.h(4): error C2504: 'Singleton': base class undefined
+e:\programming 4\gameengine\minigin\collisionsystem.h(4): error C2143: syntax error: missing ',' before '<'
+  DigDugScene.cpp
+  FPSComponent.cpp
+  FSMComponent.cpp
+  GameObject.cpp
+e:\programming 4\gameengine\minigin\gameobject.cpp(46): error C2220: warning treated as error - no 'object' file generated
+e:\programming 4\gameengine\minigin\gameobject.cpp(46): warning C4100: 'pComponent': unreferenced formal parameter
+  InputManager.cpp
+  PlayerController.cpp
+  Scene.cpp
+  SpriteComponent.cpp
+  TextComponent.cpp
+  TextureComponent.cpp
+  TransformComponent.cpp
+  Generating Code...

@@ -2,6 +2,7 @@
 #include <memory>
 #include "Transform.h"
 class BaseComponent;
+class ColliderComponent;
 
 namespace dae
 {

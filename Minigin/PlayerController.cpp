@@ -5,24 +5,26 @@
 dae::PlayerController::~PlayerController()
 {
 	InputManager::GetInstance().ClearCommands(0);
-	for (BaseCommand* pCommand : m_pCommands)
-	{
-		delete pCommand;
-	}
 }
 
 void dae::PlayerController::Posses(GameObject * pActor)
 {
 	m_pPossesedActor = pActor;
-	for (BaseCommand* pCommand : m_pCommands)
+
+	for (auto pCommand : m_spCommands)
 	{
 		pCommand->SetActor(m_pPossesedActor);
 	}
 }
 
-void dae::PlayerController::AddCommand(dae::ControllerButton button ,BaseCommand * pCommand)
+void dae::PlayerController::AddCommand(dae::ControllerButton button ,const std::shared_ptr<BaseCommand>& spCommand)
 {
-	pCommand->SetActor(m_pPossesedActor);
-	m_pCommands.push_back(pCommand);
-	InputManager::GetInstance().SetCommand(button, pCommand);
+	spCommand->SetActor(m_pPossesedActor);
+	m_spCommands.push_back(spCommand);
+	InputManager::GetInstance().SetCommand(button, spCommand);
+}
+
+void dae::PlayerController::RemoveCommand(dae::ControllerButton button)
+{
+	InputManager::GetInstance().ClearButton(button, m_ID);
 }
