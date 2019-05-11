@@ -192,16 +192,18 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h" />
-    <ClInclude Include="BehaviorComponent.h" />
+    <ClInclude Include="DigDugPlayerComponent.h" />
+    <ClInclude Include="DigDugPlayerStates.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="Tile.h" />
     <ClInclude Include="BaseCommand.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="CollisionSystem.h" />
-    <ClInclude Include="DigDugBehavior.h" />
     <ClInclude Include="DigDugLevelComponent.h" />
     <ClInclude Include="DigDugScene.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
-    <ClInclude Include="FSMComponent.h" />
+    <ClInclude Include="FiniteStateMachine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="IBehavior.h" />
     <ClInclude Include="InputManager.h" />
@@ -227,14 +229,17 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DigDugPlayerComponent.cpp" />
+    <ClCompile Include="DigDugPlayerStates.cpp" />
+    <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="CollisionSystem.cpp" />
-    <ClCompile Include="DigDugBehavior.cpp" />
     <ClCompile Include="DigDugLevelComponent.cpp" />
     <ClCompile Include="DigDugScene.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
-    <ClCompile Include="FSMComponent.cpp" />
+    <ClCompile Include="FiniteStateMachine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Log.cpp" />

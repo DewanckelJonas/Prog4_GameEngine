@@ -1,6 +1,5 @@
 #include "MiniginPCH.h"
 #include "InputManager.h"
-#include <SDL.h>
 #include "PlayerController.h"
 
 dae::InputManager::~InputManager()
@@ -37,15 +36,23 @@ bool dae::InputManager::ProcessInput()
 
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT) {
+		switch(e.type)
+		{
+		case SDL_QUIT:
 			return false;
+			break;
+		case SDL_MOUSEMOTION:
+			m_MousePos.x = float(e.motion.x);
+			m_MousePos.y = float(e.motion.y);
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			m_MouseButtonStates[MouseButton(e.button.button)] = true;
+			break;
+		case SDL_MOUSEBUTTONUP:
+			m_MouseButtonStates[MouseButton(e.button.button)] = false;
+			break;
 		}
-		if (e.type == SDL_KEYDOWN) {
-
-		}
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
-
-		}
+		
 	}
 
 	return true;
@@ -57,6 +64,10 @@ void dae::InputManager::Initialize()
 	{
 		m_PlayerControllers[i] = new PlayerController(nullptr, i);
 	}
+
+	m_MouseButtonStates[MouseButton::Left] = false;
+	m_MouseButtonStates[MouseButton::Right] = false;
+	m_MouseButtonStates[MouseButton::Middle] = false;
 }
 
 bool dae::InputManager::IsPressed(ControllerButton button, size_t controllerIdx) const
@@ -105,5 +116,10 @@ void dae::InputManager::ClearCommands(size_t controllerIdx)
 dae::PlayerController * dae::InputManager::GetPlayerControllers(size_t controllerIdx)
 {
 	return m_PlayerControllers[controllerIdx];
+}
+
+bool dae::InputManager::IsMouseButtonPressed(MouseButton button) const
+{
+	return m_MouseButtonStates.at(button);
 }
 

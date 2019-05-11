@@ -13,6 +13,10 @@ dae::TextureComponent::TextureComponent(const std::string& filePath)
 
 void dae::TextureComponent::Render() const
 {
-	glm::vec3 pos = GetGameObject()->GetComponent<TransformComponent>()->GetPosition();
-	dae::Renderer::GetInstance().RenderTexture(*m_spTexture, pos.x, pos.y);
+	auto transform = GetGameObject()->GetComponent<TransformComponent>();
+	auto pos = transform->GetPosition();
+	float angle = transform->GetRotation();
+	auto scale = transform->GetScale();
+
+	dae::Renderer::GetInstance().RenderTexture(*m_spTexture, pos.x, pos.y, angle, scale);
 }

@@ -2,6 +2,7 @@
 #include "Shapes.h"
 namespace dae
 {
+	class ColliderComponent;
 	struct Collision
 	{
 		ColliderComponent* otherCollider;

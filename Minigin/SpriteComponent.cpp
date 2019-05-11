@@ -27,7 +27,10 @@ void dae::SpriteComponent::Update(float deltaTime)
 
 void dae::SpriteComponent::Render() const
 {
-	glm::vec3 pos = GetGameObject()->GetComponent<TransformComponent>()->GetPosition();
+	auto transform = GetGameObject()->GetComponent<TransformComponent>();
+	auto pos = transform->GetPosition();
+	float angle = transform->GetRotation();
+	auto scale = transform->GetScale();
 	Rect sourceRect;
 	int currentRow{ m_CurrentFrame / m_Sprite.GetCols() };
 	int currentCol{ m_CurrentFrame % m_Sprite.GetCols() };
@@ -36,6 +39,6 @@ void dae::SpriteComponent::Render() const
 	sourceRect.pos.x = sourceRect.width * currentCol;
 	sourceRect.pos.y = sourceRect.height*(m_Sprite.GetRows() - 1 - currentRow);
 	Rect targetRect{ {pos.x, pos.y }, sourceRect.width, sourceRect.height };
-	Renderer::GetInstance().RenderTexture(*m_Sprite.GetTexture(), targetRect, sourceRect);
+	Renderer::GetInstance().RenderTexture(*m_Sprite.GetTexture(), targetRect, sourceRect, angle, scale);
 }
 

@@ -12,5 +12,6 @@ public:
 	dae::PlayerController* m_PlayerController;
 	dae::GameObject* m_Player;
 	dae::GameObject* m_Player1;
+	dae::GameObject* m_Level;
 };
 
