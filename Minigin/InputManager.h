@@ -25,7 +25,11 @@ namespace dae
 		ButtonA = XINPUT_GAMEPAD_A,
 		ButtonB = XINPUT_GAMEPAD_B,
 		ButtonX = XINPUT_GAMEPAD_X,
-		ButtonY = XINPUT_GAMEPAD_Y
+		ButtonY = XINPUT_GAMEPAD_Y,
+		DpadLeft = XINPUT_GAMEPAD_DPAD_LEFT,
+		DpadRight = XINPUT_GAMEPAD_DPAD_RIGHT,
+		DpadUp = XINPUT_GAMEPAD_DPAD_UP,
+		DpadDown = XINPUT_GAMEPAD_DPAD_DOWN,
 	};
 
 	enum class MouseButton

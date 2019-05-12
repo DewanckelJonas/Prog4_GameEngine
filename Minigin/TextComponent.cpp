@@ -38,7 +38,7 @@ void dae::TextComponent::Render() const
 	if (m_spTexture)
 	{
 		const auto pos = GetGameObject()->GetComponent<TransformComponent>()->GetPosition();
-		Renderer::GetInstance().RenderTexture(*m_spTexture, pos.x, pos.y);
+		Renderer::GetInstance().RenderTexture(*m_spTexture, pos.x, pos.y, 0, glm::vec2(1,1));
 	}
 }
 

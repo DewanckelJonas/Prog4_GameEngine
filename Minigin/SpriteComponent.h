@@ -12,7 +12,7 @@ namespace dae
 	class SpriteComponent final : public BaseComponent
 	{
 	public:
-		SpriteComponent(const std::string& filePath, int nrOfRows, int nrOfCols);
+		SpriteComponent(const std::string& filePath, int nrOfRows, int nrOfCols, float targetWidth = 0.f, float targetHeight = 0.f, bool drawOnCenter = true);
 		void Initialize() override {};
 		void Update(float elapsedSec) override;
 		void Render() const override;
@@ -29,5 +29,8 @@ namespace dae
 		int m_NrOfFrames;
 		int m_CurrentFrame;
 		float m_FrameTime;
+		bool m_DrawOnCenter;
+		float m_TargetWidth;
+		float m_TargetHeight;
 	};
 }
