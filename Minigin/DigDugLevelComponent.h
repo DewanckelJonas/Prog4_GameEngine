@@ -34,6 +34,9 @@ public:
 
 	void Save(const std::string& path) const;
 
+	float GetTileWidth() { return m_Grid.GetTileWidth(); }
+	float GetTileHeight() { return m_Grid.GetTileHeight(); }
+
 	void SetTile(const glm::vec2& pos, TileType type);
 	std::weak_ptr<DigDugTile> GetTile(const glm::vec2& pos) const;
 	glm::vec2 GetNearestTileCenter(const glm::vec2& pos) const;

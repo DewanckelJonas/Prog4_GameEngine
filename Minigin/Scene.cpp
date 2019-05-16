@@ -18,16 +18,13 @@ dae::Scene::~Scene()
 
 void dae::Scene::Add(GameObject* object)
 {
+	object->Initialize();
 	mObjects.push_back(object);
 }
 
 
 void dae::Scene::Initialize()
 {
-	for (auto gameObject : mObjects)
-	{
-		gameObject->Initialize();
-	}
 }
 
 void dae::Scene::Update(float deltaTime)
@@ -42,6 +39,16 @@ void dae::Scene::Update(float deltaTime)
 	for(auto gameObject : mObjects)
 	{
 		gameObject->Update(deltaTime);
+	}
+	for (int i = 0; i < int(mObjects.size()); i++)
+	{
+		if(mObjects[i]->IsDestroyed())
+		{
+			delete mObjects[i];
+			mObjects[i] = mObjects.back();
+			mObjects.pop_back();
+			--i;
+		}
 	}
 }
 

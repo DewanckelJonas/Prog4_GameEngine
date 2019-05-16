@@ -17,14 +17,13 @@ namespace dae
 		void Update(float elapsedSec) override;
 		void Render() const override;
 
-		int GetWidth() const { return m_Sprite.GetTexture()->GetWidth(); };
-		int GetHeight() const { return m_Sprite.GetTexture()->GetHeight(); };
-		glm::vec2 GetScale() const { return m_Scale; }
-		void SetScale(const glm::vec2& scale) { m_Scale = scale; }
+		int GetSpriteWidth() const { return m_Sprite.GetTexture()->GetWidth(); };
+		int GetSpriteHeight() const { return m_Sprite.GetTexture()->GetHeight(); };
+		void SetTargetWidth(float width) { m_TargetWidth = width; }
+		void SetTargetHeight(float height) { m_TargetHeight = height; }
 
 	private:
 		Sprite m_Sprite;
-		glm::vec2 m_Scale;
 		float m_ElapsedSec;
 		int m_NrOfFrames;
 		int m_CurrentFrame;

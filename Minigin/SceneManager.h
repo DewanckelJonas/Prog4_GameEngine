@@ -14,6 +14,7 @@ namespace dae
 		void FixedUpdate(float deltaTime);
 		void Update(float deltaTime);
 		void Render();
+		std::weak_ptr<Scene> GetActiveScene() { return m_spCurrentScene; };
 
 	private:
 		std::map<std::string, std::shared_ptr<Scene>> m_spScenes;

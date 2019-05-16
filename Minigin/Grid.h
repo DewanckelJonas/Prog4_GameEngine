@@ -16,8 +16,8 @@ namespace dae
 		void CalculateRowCol(glm::vec2 pos, unsigned short& row, unsigned short& col) const;
 		void SaveGrid(const std::string& filePath) const;
 
-		float GetTileWidth() const { return m_Width; }
-		float GetTileHeight() const { return m_Height; }
+		float GetTileWidth() const { return m_TileWidth; }
+		float GetTileHeight() const { return m_TileHeight; }
 
 		void Render(glm::vec2 position) const;
 		void AddTile(const std::shared_ptr<Tile>& tile);

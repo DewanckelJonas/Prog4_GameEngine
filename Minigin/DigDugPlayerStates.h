@@ -3,6 +3,7 @@
 
 namespace dae { class TransformComponent; }
 class DigDugPlayerComponent;
+class PumpComponent;
 class DigDugIdleState final : public dae::IState
 {
 public:
@@ -24,18 +25,20 @@ public:
 private:
 	DigDugPlayerComponent* m_pPlayerComponent;
 	dae::TransformComponent* m_pTransformComponent;
-	glm::vec2 prevForward{ 0,1 };
-	float m_MovementSpeed{ 20 };
+	glm::vec2 m_PrevDirection{ 0,0 };
+	float m_MovementSpeed{ 50 };
+	float m_GridSnap{ 2.f };
 };
 
 class DigDugPumpState final : public dae::IState
 {
 public:
 	DigDugPumpState() {};
-	void Enter(dae::GameObject* ) override {};
+	void Enter(dae::GameObject* ) override;
 	void Exit(dae::GameObject* ) override {};
 	IState* Update(dae::GameObject*, float ) override { return nullptr; };
 private:
+	PumpComponent* m_pPump;
 	DigDugPlayerComponent* m_pPlayerComponent;
 };
 

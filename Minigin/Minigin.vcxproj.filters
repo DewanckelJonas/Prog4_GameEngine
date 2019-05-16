@@ -102,9 +102,6 @@
     <ClInclude Include="CollisionSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ColliderComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DigDugLevelComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -121,6 +118,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DigDugPlayerStates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PumpComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DigDugPrefabs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -204,6 +210,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DigDugPlayerStates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PumpComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DigDugPrefabs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

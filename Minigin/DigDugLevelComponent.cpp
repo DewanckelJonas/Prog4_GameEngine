@@ -52,8 +52,8 @@ glm::vec2 DigDugLevelComponent::GetNearestTileCenter(const glm::vec2 & pos) cons
 	m_Grid.CalculateRowCol(pos - originPos, row, col);
 	
 	glm::vec2 closestCenter{};
-	closestCenter.y = row * m_Grid.GetTileHeight() + m_Grid.GetTileHeight() / 2;
-	closestCenter.x = col * m_Grid.GetTileWidth() + m_Grid.GetTileWidth() / 2;
+	closestCenter.y = (row * m_Grid.GetTileHeight() + m_Grid.GetTileHeight() / 2) + originPos.y;
+	closestCenter.x = (col * m_Grid.GetTileWidth() + m_Grid.GetTileWidth() / 2) + originPos.x;
 	return closestCenter;
 }
 

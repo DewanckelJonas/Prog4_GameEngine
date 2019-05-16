@@ -11,6 +11,10 @@ void dae::CollisionSystem::Update()
 {
 	for (size_t i = 0; i < m_pColliders.size(); i++)
 	{
+		m_pColliders[i]->ClearCollisions();
+	}
+	for (size_t i = 0; i < m_pColliders.size(); i++)
+	{
 		for (size_t j = i; j < m_pColliders.size(); j++)
 		{
 			m_pColliders[i]->CheckCollision(*m_pColliders[j]);

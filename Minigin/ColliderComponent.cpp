@@ -1,12 +1,25 @@
 #include "MiniginPCH.h"
 #include "ColliderComponent.h"
 #include "CollisionSystem.h"
+#include "TransformComponent.h"
 
 dae::ColliderComponent::ColliderComponent(const Rect & shape, const std::string& tag)
-	:m_Shape{shape}
+	:m_Shape{ {0,0} ,shape.width, shape.height }
 	,m_Tag{tag}
+	,m_LocalPos{shape.pos}
 {
 	CollisionSystem::GetInstance().AddCollider(this);
+}
+
+void dae::ColliderComponent::Initialize()
+{
+	m_pTransform = GetGameObject()->GetComponent<TransformComponent>();
+}
+
+void dae::ColliderComponent::Update(float)
+{
+	m_Shape.pos.x = m_pTransform->GetPosition().x + m_LocalPos.x;
+	m_Shape.pos.y = m_pTransform->GetPosition().y + m_LocalPos.y;
 }
 
 void dae::ColliderComponent::CheckCollision(ColliderComponent & collider)
@@ -38,5 +51,15 @@ void dae::ColliderComponent::CheckCollision(ColliderComponent & collider)
 	m_Collisions.push_back(collision);
 
 	return;
+}
+
+const std::vector<dae::Collision>& dae::ColliderComponent::GetCollisions()
+{
+	return m_Collisions;
+}
+
+void dae::ColliderComponent::ClearCollisions()
+{
+	m_Collisions.clear();
 }
 

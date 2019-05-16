@@ -13,6 +13,8 @@ namespace dae
 		void Update(float deltaTime);
 		void Render() const;
 		void AddComponent(BaseComponent* pComponent);
+		bool IsDestroyed() { return m_IsDestroyed; }
+		void Destroy() { m_IsDestroyed = true; }
 
 		template<class T>
 		T* GetComponent()
@@ -35,7 +37,7 @@ namespace dae
 		GameObject& operator=(GameObject&& other) = delete;
 
 	private:
-
+		bool m_IsDestroyed = false;
 		std::vector<BaseComponent*> m_pComponents;
 	};
 }
