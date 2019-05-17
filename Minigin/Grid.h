@@ -9,7 +9,7 @@ namespace dae
 	public:
 		Grid(unsigned short rows, unsigned short cols, float width, float height);
 		Grid(const std::string& filePath, float width, float height);
-		virtual ~Grid();
+		~Grid();
 
 		void SetTile(unsigned char tileId, unsigned short rowIdx, unsigned short colIdx);
 		std::weak_ptr<Tile> GetTile(unsigned short rowIdx, unsigned short colIdx) const;

@@ -129,6 +129,9 @@
     <ClInclude Include="DigDugPrefabs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PookaComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MiniginPCH.cpp">
@@ -216,6 +219,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DigDugPrefabs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PookaComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

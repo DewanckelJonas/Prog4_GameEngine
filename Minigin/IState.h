@@ -9,6 +9,7 @@ namespace dae
 		IState() : m_pStateMachine() {};
 		virtual void Enter(GameObject*) = 0;
 		virtual void Exit(GameObject*) = 0;
+		virtual ~IState() = default;
 		virtual IState* Update(GameObject*, float deltaTime) = 0;
 		bool IsEventTriggered(const std::string& eventName) { return m_pStateMachine->IsEventTriggered(eventName); };
 		FiniteStateMachine* GetStateMachine() { return m_pStateMachine; };

@@ -12,13 +12,13 @@ class DigDugLevelComponent;
 class DigDugPlayerComponent : public BaseComponent
 {
 public:
-	DigDugPlayerComponent(DigDugLevelComponent* pLevel);
-	~DigDugPlayerComponent();
+	DigDugPlayerComponent(std::weak_ptr<DigDugLevelComponent> pLevel);
+	~DigDugPlayerComponent() {};
 	glm::vec2 GetDirection() { return m_MoveDirection; }
 	void SetDirection(const glm::vec2& direction) { m_MoveDirection = direction; }
 	void Pump();
 	void Die();
-	DigDugLevelComponent* GetLevel() { return m_pLevel; };
+	std::weak_ptr<DigDugLevelComponent> GetLevel() { return m_pLevel; };
 	void Initialize() override;
 	void Update(float deltaTime) override;
 	void Render() const override {};
@@ -26,9 +26,9 @@ public:
 	glm::vec2 GetForward() { return m_Forward; }
 
 private:
-	DigDugLevelComponent* m_pLevel;
-	dae::TransformComponent* m_pTransform;
-	dae::FiniteStateMachine* m_StateMachine{};
+	std::weak_ptr<DigDugLevelComponent> m_pLevel;
+	std::weak_ptr<dae::TransformComponent> m_pTransform;
+	std::shared_ptr<dae::FiniteStateMachine> m_StateMachine{};
 	glm::vec2 m_MoveDirection{0,0};
 	glm::vec2 m_Forward{ 1.f, 0.f };
 };
@@ -37,7 +37,7 @@ class DigDugMoveCmd final : public dae::BaseCommand
 {
 public:
 	DigDugMoveCmd(const glm::vec2& direction) : m_Direction(direction) {};
-	void Execute() override { GetActor()->GetComponent<DigDugPlayerComponent>()->SetDirection(m_Direction); };
+	void Execute() override { GetActor()->GetComponent<DigDugPlayerComponent>().lock()->SetDirection(m_Direction); };
 private:
 	const glm::vec2 m_Direction;
 };
@@ -46,5 +46,5 @@ class DigDugPumpCommand final : public dae::BaseCommand
 {
 public:
 	DigDugPumpCommand() {};
-	void Execute() override { GetActor()->GetComponent<DigDugPlayerComponent>()->Pump(); }
+	void Execute() override { GetActor()->GetComponent<DigDugPlayerComponent>().lock()->Pump(); }
 };

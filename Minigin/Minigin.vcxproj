@@ -196,6 +196,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="DigDugPlayerStates.h" />
     <ClInclude Include="DigDugPrefabs.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="PookaComponent.h" />
     <ClInclude Include="PumpComponent.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="BaseCommand.h" />
@@ -235,6 +236,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="DigDugPlayerStates.cpp" />
     <ClCompile Include="DigDugPrefabs.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="PookaComponent.cpp" />
     <ClCompile Include="PumpComponent.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />

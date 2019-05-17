@@ -7,8 +7,8 @@ void dae::FPSComponent::Update(float elapsedSec)
 {
 	m_FPS = 1 / elapsedSec;
 	auto textComp = GetGameObject()->GetComponent<TextComponent>();
-	if (textComp)
+	if (!textComp.expired())
 	{
-		textComp->SetText(std::to_string(m_FPS));
+		textComp.lock()->SetText(std::to_string(m_FPS));
 	}
 }

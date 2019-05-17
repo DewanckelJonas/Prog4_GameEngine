@@ -16,6 +16,7 @@ namespace dae
 	{
 	public:
 		ColliderComponent(const Rect& shape, const std::string& tag);
+		~ColliderComponent();
 		void Initialize() override;
 		void Update(float deltaTime) override;
 		void Render() const override {};
@@ -28,12 +29,13 @@ namespace dae
 		float GetWidth() { return m_Shape.width; }
 		float GetHeight() { return m_Shape.height; }
 		const std::string& GetTag() { return m_Tag; }
+		void SetTag(const std::string& tag) { m_Tag = tag; }
 
 	private:
 		Rect m_Shape;
 		std::string m_Tag;
 		std::vector<Collision> m_Collisions;
-		TransformComponent* m_pTransform;
+		std::weak_ptr<TransformComponent> m_pTransform;
 		glm::vec2 m_LocalPos;
 	};
 }

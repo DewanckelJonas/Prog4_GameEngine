@@ -4,17 +4,9 @@
 #include "Renderer.h"
 #include "BaseComponent.h"
 
-dae::GameObject::~GameObject()
-{
-	for (auto pComponent : m_pComponents)
-	{
-		delete pComponent;
-	}
-};
-
 void dae::GameObject::Initialize()
 {
-	for (auto pComponent : m_pComponents)
+	for (auto pComponent : m_spComponents)
 	{
 		pComponent->Initialize();
 	}
@@ -22,7 +14,7 @@ void dae::GameObject::Initialize()
 
 void dae::GameObject::Update(float deltaTime) 
 {
-	for(auto pComponent : m_pComponents)
+	for(auto pComponent : m_spComponents)
 	{
 		pComponent->Update(deltaTime);
 	}
@@ -31,16 +23,16 @@ void dae::GameObject::Update(float deltaTime)
 void dae::GameObject::Render() const
 {
 
-	for (auto pComponent : m_pComponents)
+	for (auto pComponent : m_spComponents)
 	{
 		pComponent->Render();
 	}
 }
 
-void dae::GameObject::AddComponent(BaseComponent* pComponent)
+void dae::GameObject::AddComponent(std::shared_ptr<BaseComponent> pComponent)
 {
 	pComponent->m_GameObject = this;
-	m_pComponents.push_back(pComponent);
+	m_spComponents.push_back(pComponent);
 }
 
 

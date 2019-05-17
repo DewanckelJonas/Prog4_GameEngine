@@ -1,6 +1,5 @@
 #include "MiniginPCH.h"
 #include "Renderer.h"
-#include <SDL.h>
 #include "SceneManager.h"
 #include "Texture2D.h"
 
@@ -31,7 +30,7 @@ void dae::Renderer::Destroy()
 	}
 }
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, float angle, const glm::vec2& scale) const
+void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, float angle, SDL_Point* rotationCenter, const glm::vec2& scale) const
 {
 	SDL_Rect dst;
 	dst.x = static_cast<int>(x);
@@ -45,10 +44,10 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	else if (scale.y < 0)
 		flip = SDL_FLIP_VERTICAL;
 
-	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, angle, nullptr, flip);
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, angle, rotationCenter, flip);
 }
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height, float angle, const glm::vec2& scale) const
+void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height, float angle, SDL_Point* rotationCenter, const glm::vec2& scale) const
 {
 	SDL_Rect dst;
 	dst.x = static_cast<int>(x);
@@ -62,10 +61,10 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 		flip = SDL_FLIP_HORIZONTAL;
 	else if (scale.y < 0)
 		flip = SDL_FLIP_VERTICAL;
-	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, angle, nullptr, flip);
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, angle, rotationCenter, flip);
 }
 
-void dae::Renderer::RenderTexture(const Texture2D & texture, const Rect & targetRect, float angle, const glm::vec2& scale) const
+void dae::Renderer::RenderTexture(const Texture2D & texture, const Rect & targetRect, float angle, SDL_Point* rotationCenter, const glm::vec2& scale) const
 {
 	SDL_Rect dst;
 	dst.x = static_cast<int>(targetRect.pos.x);
@@ -79,10 +78,10 @@ void dae::Renderer::RenderTexture(const Texture2D & texture, const Rect & target
 		flip = SDL_FLIP_HORIZONTAL;
 	else if (scale.y < 0)
 		flip = SDL_FLIP_VERTICAL;
-	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, angle, nullptr, flip);
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst, angle, rotationCenter, flip);
 }
 
-void dae::Renderer::RenderTexture(const Texture2D & texture, const Rect & targetRect, const Rect & sourceRect, float angle, const glm::vec2& scale) const
+void dae::Renderer::RenderTexture(const Texture2D & texture, const Rect & targetRect, const Rect & sourceRect, float angle, SDL_Point* rotationCenter, const glm::vec2& scale) const
 {
 	SDL_Rect dst;
 	dst.x = static_cast<int>(targetRect.pos.x);
@@ -104,5 +103,5 @@ void dae::Renderer::RenderTexture(const Texture2D & texture, const Rect & target
 	else if (scale.y < 0)
 		flip = SDL_FLIP_VERTICAL;
 
-	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst, angle, nullptr, flip);
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst, angle, rotationCenter, flip);
 }

@@ -28,7 +28,7 @@ void DigDugLevelComponent::Initialize()
 
 void DigDugLevelComponent::Render() const
 {
-	auto pos = GetGameObject()->GetComponent<dae::TransformComponent>()->GetPosition();
+	auto pos = GetGameObject()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
 	m_Grid.Render(pos);
 }
 
@@ -39,7 +39,7 @@ void DigDugLevelComponent::Save(const std::string & path) const
 
 void DigDugLevelComponent::SetTile(const glm::vec2 & pos, TileType type)
 {
-	glm::vec2 originPos = GetGameObject()->GetComponent<dae::TransformComponent>()->GetPosition();
+	glm::vec2 originPos = GetGameObject()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
 	unsigned short row, col;
 	m_Grid.CalculateRowCol(pos - originPos, row, col);
 	m_Grid.SetTile(unsigned char(type), row, col);
@@ -47,7 +47,7 @@ void DigDugLevelComponent::SetTile(const glm::vec2 & pos, TileType type)
 
 glm::vec2 DigDugLevelComponent::GetNearestTileCenter(const glm::vec2 & pos) const
 {
-	glm::vec2 originPos = GetGameObject()->GetComponent<dae::TransformComponent>()->GetPosition();
+	glm::vec2 originPos = GetGameObject()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
 	unsigned short row, col;
 	m_Grid.CalculateRowCol(pos - originPos, row, col);
 	
@@ -59,7 +59,7 @@ glm::vec2 DigDugLevelComponent::GetNearestTileCenter(const glm::vec2 & pos) cons
 
 std::weak_ptr<DigDugTile> DigDugLevelComponent::GetTile(const glm::vec2 & pos) const
 {
-	glm::vec2 originPos = GetGameObject()->GetComponent<dae::TransformComponent>()->GetPosition();
+	glm::vec2 originPos = GetGameObject()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
 	unsigned short row, col;
 	m_Grid.CalculateRowCol(pos - originPos, row, col);
 	auto wpTile = m_Grid.GetTile(row, col);

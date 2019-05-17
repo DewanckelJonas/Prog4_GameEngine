@@ -16,9 +16,21 @@ dae::SpriteComponent::SpriteComponent(const std::string & filePath, int nrOfRows
 {
 }
 
+dae::SpriteComponent::SpriteComponent(const Sprite& sprite, float targetWidth, float targetHeight, bool drawOnCenter)
+	: m_Sprite(sprite)
+	, m_CurrentFrame(0)
+	, m_FrameTime(0.1f)
+	, m_ElapsedSec(0)
+	, m_DrawOnCenter(drawOnCenter)
+	, m_TargetWidth(targetWidth)
+	, m_TargetHeight(targetHeight)
+{
+	m_NrOfFrames = m_Sprite.GetCols() * m_Sprite.GetRows();
+}
+
 void dae::SpriteComponent::Update(float deltaTime)
 {
-	m_ElapsedSec += deltaTime;
+	m_ElapsedSec += m_PlaySpeed*deltaTime;
 	if (m_ElapsedSec > m_FrameTime)
 	{
 		m_ElapsedSec -= m_FrameTime;
@@ -29,7 +41,7 @@ void dae::SpriteComponent::Update(float deltaTime)
 
 void dae::SpriteComponent::Render() const
 {
-	auto transform = GetGameObject()->GetComponent<TransformComponent>();
+	auto transform = GetGameObject()->GetComponent<TransformComponent>().lock();
 	auto pos = transform->GetPosition();
 	float angle = transform->GetRotation();
 	auto scale = transform->GetScale();
@@ -51,6 +63,20 @@ void dae::SpriteComponent::Render() const
 		targetRect.pos.x -= targetRect.width / 2;
 		targetRect.pos.y -= targetRect.height / 2;
 	}
-	Renderer::GetInstance().RenderTexture(*m_Sprite.GetTexture(), targetRect, sourceRect, angle, scale);
+
+	SDL_Point rotationCenter{ 0,0 };
+	if(m_DrawOnCenter)
+	{
+		Renderer::GetInstance().RenderTexture(*m_Sprite.GetTexture(), targetRect, sourceRect, angle, nullptr, scale);
+	}else
+	{
+		Renderer::GetInstance().RenderTexture(*m_Sprite.GetTexture(), targetRect, sourceRect, angle, &rotationCenter, scale);
+	}
+}
+
+void dae::SpriteComponent::SetSprite(const Sprite & sprite)
+{
+	m_Sprite = sprite;
+	m_NrOfFrames = m_Sprite.GetCols() * m_Sprite.GetRows();
 }
 

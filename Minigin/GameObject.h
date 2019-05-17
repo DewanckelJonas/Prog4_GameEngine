@@ -12,25 +12,23 @@ namespace dae
 		void Initialize();
 		void Update(float deltaTime);
 		void Render() const;
-		void AddComponent(BaseComponent* pComponent);
+		void AddComponent(std::shared_ptr<BaseComponent> pComponent);
 		bool IsDestroyed() { return m_IsDestroyed; }
 		void Destroy() { m_IsDestroyed = true; }
 
 		template<class T>
-		T* GetComponent()
+		std::weak_ptr<T> GetComponent()
 		{
-			const type_info& ti = typeid(T);
-			for (BaseComponent* pComponent : m_pComponents)
+			for (auto spComponent : m_spComponents)
 			{
-				if (pComponent && typeid(*pComponent) == ti)
-					return static_cast<T*>(pComponent);
+				std::shared_ptr<T> result = std::dynamic_pointer_cast<T>(spComponent);
+				if (result) return result;
 			}
-			return nullptr;
+			return {};
 		}
 
 
 		GameObject() = default;
-		~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
@@ -38,6 +36,6 @@ namespace dae
 
 	private:
 		bool m_IsDestroyed = false;
-		std::vector<BaseComponent*> m_pComponents;
+		std::vector<std::shared_ptr<BaseComponent>> m_spComponents;
 	};
 }

@@ -11,6 +11,11 @@ dae::ColliderComponent::ColliderComponent(const Rect & shape, const std::string&
 	CollisionSystem::GetInstance().AddCollider(this);
 }
 
+dae::ColliderComponent::~ColliderComponent()
+{
+	CollisionSystem::GetInstance().RemoveCollider(this);
+}
+
 void dae::ColliderComponent::Initialize()
 {
 	m_pTransform = GetGameObject()->GetComponent<TransformComponent>();
@@ -18,8 +23,8 @@ void dae::ColliderComponent::Initialize()
 
 void dae::ColliderComponent::Update(float)
 {
-	m_Shape.pos.x = m_pTransform->GetPosition().x + m_LocalPos.x;
-	m_Shape.pos.y = m_pTransform->GetPosition().y + m_LocalPos.y;
+	m_Shape.pos.x = m_pTransform.lock()->GetPosition().x + m_LocalPos.x;
+	m_Shape.pos.y = m_pTransform.lock()->GetPosition().y + m_LocalPos.y;
 }
 
 void dae::ColliderComponent::CheckCollision(ColliderComponent & collider)

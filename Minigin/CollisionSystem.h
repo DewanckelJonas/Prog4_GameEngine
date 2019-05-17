@@ -9,6 +9,7 @@ namespace dae
 	{
 	public:
 		void AddCollider(ColliderComponent* pCollider);
+		void RemoveCollider(ColliderComponent* pCollider);
 		void Update();
 	private:
 		std::vector<ColliderComponent*> m_pColliders;

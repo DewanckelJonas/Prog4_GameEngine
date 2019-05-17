@@ -31,7 +31,7 @@ namespace dae
 	{
 	public:
 		MoveCmd(glm::vec3 direction, float speed) : m_Direction(direction), m_Speed(speed) {}
-		void Execute() override { GetActor()->GetComponent<TransformComponent>()->Translate(m_Speed * m_Direction); }
+		void Execute() override { GetActor()->GetComponent<TransformComponent>().lock()->Translate(m_Speed * m_Direction); }
 
 	private:
 		float m_Speed;

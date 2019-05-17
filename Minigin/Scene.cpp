@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "InputManager.h"
+#include "CollisionSystem.h"
 #include "BaseCommand.h"
 
 unsigned int dae::Scene::idCounter = 0;
@@ -30,15 +31,16 @@ void dae::Scene::Initialize()
 void dae::Scene::Update(float deltaTime)
 {
 	InputManager* pInputManager = &InputManager::GetInstance();
+	CollisionSystem* pCollisionSystem = &CollisionSystem::GetInstance();
 	size_t nrOfControllers = pInputManager->GetMaxNrOfControllers();
 	for (size_t i = 0; i < nrOfControllers; i++)
 	{
 		auto spCommand = pInputManager->HandleInput(i);
 		if (spCommand) { spCommand->Execute(); }
 	}
-	for(auto gameObject : mObjects)
+	for (size_t i{}; i < mObjects.size(); ++i)
 	{
-		gameObject->Update(deltaTime);
+		mObjects[i]->Update(deltaTime);
 	}
 	for (int i = 0; i < int(mObjects.size()); i++)
 	{
@@ -50,6 +52,7 @@ void dae::Scene::Update(float deltaTime)
 			--i;
 		}
 	}
+	pCollisionSystem->Update();
 }
 
 void dae::Scene::Render() const

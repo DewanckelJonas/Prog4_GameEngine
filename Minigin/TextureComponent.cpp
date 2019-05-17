@@ -14,7 +14,7 @@ dae::TextureComponent::TextureComponent(const std::string& filePath, bool drawOn
 
 void dae::TextureComponent::Render() const
 {
-	auto transform = GetGameObject()->GetComponent<TransformComponent>();
+	auto transform = GetGameObject()->GetComponent<TransformComponent>().lock();
 	auto pos = transform->GetPosition();
 	float angle = transform->GetRotation();
 	auto scale = transform->GetScale();
@@ -29,6 +29,6 @@ void dae::TextureComponent::Render() const
 		targetRect.pos.x -= targetRect.width / 2;
 		targetRect.pos.y -= targetRect.height / 2;
 	}
-
-	dae::Renderer::GetInstance().RenderTexture(*m_spTexture, targetRect, angle, scale);
+	SDL_Point rotationCenter{ 0, 0 };
+	dae::Renderer::GetInstance().RenderTexture(*m_spTexture, targetRect, angle, &rotationCenter, scale);
 }

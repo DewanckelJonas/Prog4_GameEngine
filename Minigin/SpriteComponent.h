@@ -13,9 +13,14 @@ namespace dae
 	{
 	public:
 		SpriteComponent(const std::string& filePath, int nrOfRows, int nrOfCols, float targetWidth = 0.f, float targetHeight = 0.f, bool drawOnCenter = true);
+		SpriteComponent(const Sprite& sprite, float targetWidth = 0.f, float targetHeight = 0.f, bool drawOnCenter = true);
 		void Initialize() override {};
 		void Update(float elapsedSec) override;
 		void Render() const override;
+		void SetSprite(const Sprite& sprite);
+		void SetPlaySpeed(float speed) { m_PlaySpeed = speed; }
+		void SetCurrentFrame(int currentFrame) { m_CurrentFrame = currentFrame; }
+		int GetCurrentFrame() { return m_CurrentFrame; }
 
 		int GetSpriteWidth() const { return m_Sprite.GetTexture()->GetWidth(); };
 		int GetSpriteHeight() const { return m_Sprite.GetTexture()->GetHeight(); };
@@ -31,5 +36,6 @@ namespace dae
 		bool m_DrawOnCenter;
 		float m_TargetWidth;
 		float m_TargetHeight;
+		float m_PlaySpeed = 1.f;
 	};
 }
