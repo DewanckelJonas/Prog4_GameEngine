@@ -12,7 +12,7 @@ namespace dae
 		~Grid();
 
 		void SetTile(unsigned char tileId, unsigned short rowIdx, unsigned short colIdx);
-		std::weak_ptr<Tile> GetTile(unsigned short rowIdx, unsigned short colIdx) const;
+		std::weak_ptr<const Tile> GetTile(unsigned short rowIdx, unsigned short colIdx) const;
 		void CalculateRowCol(glm::vec2 pos, unsigned short& row, unsigned short& col) const;
 		void SaveGrid(const std::string& filePath) const;
 

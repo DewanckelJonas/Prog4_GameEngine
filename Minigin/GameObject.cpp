@@ -23,7 +23,7 @@ void dae::GameObject::Update(float deltaTime)
 void dae::GameObject::Render() const
 {
 
-	for (auto pComponent : m_spComponents)
+	for (const std::shared_ptr<const BaseComponent>& pComponent : m_spComponents)
 	{
 		pComponent->Render();
 	}
@@ -31,7 +31,7 @@ void dae::GameObject::Render() const
 
 void dae::GameObject::AddComponent(std::shared_ptr<BaseComponent> pComponent)
 {
-	pComponent->m_GameObject = this;
+	pComponent->m_GameObject = weak_from_this();
 	m_spComponents.push_back(pComponent);
 }
 

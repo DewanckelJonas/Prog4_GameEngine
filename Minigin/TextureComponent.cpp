@@ -14,7 +14,7 @@ dae::TextureComponent::TextureComponent(const std::string& filePath, bool drawOn
 
 void dae::TextureComponent::Render() const
 {
-	auto transform = GetGameObject()->GetComponent<TransformComponent>().lock();
+	auto transform = GetGameObject().lock()->GetComponent<TransformComponent>().lock();
 	auto pos = transform->GetPosition();
 	float angle = transform->GetRotation();
 	auto scale = transform->GetScale();

@@ -12,11 +12,12 @@ public:
 	void Pump();
 
 private:
-	dae::GameObject* m_pVictim;
+	std::weak_ptr<dae::GameObject> m_pVictim;
 	std::weak_ptr<DigDugLevelComponent> m_pLevel;
 	std::weak_ptr<dae::ColliderComponent> m_pCollider;
 	std::weak_ptr<dae::TextureComponent> m_pTexture;
 	float m_Speed;
+	float m_ElapsedSec{};
 	float m_LifeTime;
 	glm::vec2 m_Direction;
 };

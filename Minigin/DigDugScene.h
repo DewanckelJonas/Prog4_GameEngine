@@ -10,8 +10,8 @@ public:
 	~DigDugScene();
 
 	dae::PlayerController* m_PlayerController;
-	dae::GameObject* m_Player;
-	dae::GameObject* m_Player1;
-	dae::GameObject* m_Level;
+	std::shared_ptr<dae::GameObject> m_Player;
+	std::shared_ptr<dae::GameObject> m_Player1;
+	std::shared_ptr<dae::GameObject> m_Level;
 };
 

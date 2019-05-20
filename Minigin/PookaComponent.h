@@ -17,14 +17,19 @@ public:
 	glm::vec2 GetDirection() { return m_MoveDirection; }
 	void SetDirection(const glm::vec2& direction) { m_MoveDirection = direction; }
 	void Die();
+	void ToggleGhost();
+	std::weak_ptr<const DigDugLevelComponent> GetLevel() const { return m_pLevel; };
 	std::weak_ptr<DigDugLevelComponent> GetLevel() { return m_pLevel; };
 	void Initialize() override;
 	void Update(float deltaTime) override;
 	void Render() const override {};
 	void SetForward(glm::vec2 forward) { m_Forward = forward; }
 	glm::vec2 GetForward() { return m_Forward; }
+	bool IsGhost() const { return m_IsGhost; }
+	void SetGhost(bool value) { m_IsGhost = value; }
 
 private:
+	bool m_IsGhost = false;
 	std::weak_ptr<DigDugLevelComponent> m_pLevel;
 	std::weak_ptr<dae::TransformComponent> m_pTransform;
 	std::shared_ptr<dae::FiniteStateMachine> m_StateMachine{};
@@ -36,16 +41,18 @@ class PookaMoveCmd final : public dae::BaseCommand
 {
 public:
 	PookaMoveCmd(const glm::vec2& direction) : m_Direction(direction) {};
-	void Execute() override { GetActor()->GetComponent<PookaComponent>().lock()->SetDirection(m_Direction); };
+	void Execute() override { GetActor().lock()->GetComponent<PookaComponent>().lock()->SetDirection(m_Direction); };
+	glm::vec2 GetDirection() const { return m_Direction; }
+	void SetDirection(const glm::vec2& direction) { m_Direction = direction; }
 private:
-	const glm::vec2 m_Direction;
+	glm::vec2 m_Direction;
 };
 
-class PookaAttackCommand final : public dae::BaseCommand
+class PookaGhostCommand final : public dae::BaseCommand
 {
 public:
-	PookaAttackCommand() {};
-	void Execute() override { GetActor()->GetComponent<PookaComponent>().lock()->Die(); }
+	PookaGhostCommand() {};
+	void Execute() override { GetActor().lock()->GetComponent<PookaComponent>().lock()->ToggleGhost(); }
 };
 
 

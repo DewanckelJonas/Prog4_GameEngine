@@ -16,35 +16,39 @@ PumpComponent::PumpComponent(float speed, float lifeTime, glm::vec2 direction, c
 
 void PumpComponent::Initialize()
 {
-	m_pCollider = GetGameObject()->GetComponent<dae::ColliderComponent>();
-	m_pTexture = GetGameObject()->GetComponent<dae::TextureComponent>();
+	m_pCollider = GetGameObject().lock()->GetComponent<dae::ColliderComponent>();
+	m_pTexture = GetGameObject().lock()->GetComponent<dae::TextureComponent>();
 	m_pTexture.lock()->SetTargetHeight(0.01f);
 	m_pTexture.lock()->SetTargetWidth(0.01f);
 }
 
 void PumpComponent::Update(float deltaTime)
 {
-	m_LifeTime -= deltaTime;
-	m_pVictim = nullptr;
+	m_ElapsedSec += deltaTime;
+
+	if (m_LifeTime < m_ElapsedSec)
+	{
+		GetGameObject().lock()->Destroy();
+		return;
+	}
+
+	if (m_pVictim.lock())
+		return;
+
 	for (auto collider : m_pCollider.lock()->GetCollisions())
 	{
 		if (collider.otherCollider->GetTag() == "Enemy" || collider.otherCollider->GetTag() == "DyingEnemy")
 		{
 			m_pVictim = collider.otherCollider->GetGameObject();
 			if (collider.otherCollider->GetTag() == "Enemy")
-				m_pVictim->GetComponent<PookaComponent>().lock()->Die();
-			m_LifeTime = 0;
+				Pump();
 			return;
 		}
 	}
-	if (m_LifeTime < 0)
-	{
-		GetGameObject()->Destroy();
-		return;
-	}
+	
 	if (m_pLevel.lock()->GetTile(m_pCollider.lock()->GetWorldPosition()).lock()->IsSolid())
 	{
-		GetGameObject()->Destroy();
+		GetGameObject().lock()->Destroy();
 		return;
 	}
 	auto localColliderPos = m_pCollider.lock()->GetLocalPosition();
@@ -57,7 +61,12 @@ void PumpComponent::Update(float deltaTime)
 
 void PumpComponent::Pump()
 {
-	if(m_pVictim)
-		m_pVictim->GetComponent<PookaComponent>().lock()->Die();
+	if(m_pVictim.lock())
+	{
+		m_ElapsedSec = 0;
+		m_pVictim.lock()->GetComponent<PookaComponent>().lock()->Die();
+		if (m_pVictim.lock()->IsDestroyed())
+			GetGameObject().lock()->Destroy();
+	}
 }
 

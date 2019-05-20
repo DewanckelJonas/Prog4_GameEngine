@@ -62,7 +62,7 @@ void dae::InputManager::Initialize()
 {
 	for (size_t i = 0; i < m_MaxNrOfControllers; i++)
 	{
-		m_PlayerControllers[i] = new PlayerController(nullptr, i);
+		m_PlayerControllers[i] = new PlayerController({}, i);
 	}
 
 	m_MouseButtonStates[MouseButton::Left] = false;
@@ -95,14 +95,15 @@ void dae::InputManager::ClearButton(ControllerButton button, size_t controllerId
 	m_spButtonMappings[controllerIdx][button] = nullptr;
 }
 
-std::shared_ptr<dae::BaseCommand> dae::InputManager::HandleInput(size_t controllerIdx) const
+std::vector<std::shared_ptr<dae::BaseCommand>> dae::InputManager::HandleInput(size_t controllerIdx) const
 {
+	std::vector<std::shared_ptr<BaseCommand>> commands;
 	for (auto it = m_spButtonMappings[controllerIdx].begin(); it != m_spButtonMappings[controllerIdx].end(); it++)
 	{
 		if(IsPressed(it->first, controllerIdx)) 
-			return m_spButtonMappings[controllerIdx].at(it->first);
+			commands.push_back(m_spButtonMappings[controllerIdx].at(it->first));
 	}
-	return nullptr;
+	return commands;
 }
 
 void dae::InputManager::ClearCommands(size_t controllerIdx)

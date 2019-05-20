@@ -10,17 +10,17 @@
 #include "PookaComponent.h"
 #include"SpriteComponent.h"
 #include "ColliderComponent.h"
-void DigDugMoveState::Enter(dae::GameObject * gameObject)
+void DigDugMoveState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	m_pPlayerComponent = gameObject->GetComponent<DigDugPlayerComponent>();
-	m_pTransformComponent = gameObject->GetComponent<dae::TransformComponent>();
+	m_pPlayerComponent = gameObject.lock()->GetComponent<DigDugPlayerComponent>();
+	m_pTransformComponent = gameObject.lock()->GetComponent<dae::TransformComponent>();
 }
 
-void DigDugMoveState::Exit(dae::GameObject *)
+void DigDugMoveState::Exit(const std::weak_ptr<dae::GameObject>&)
 {
 }
 
-dae::IState * DigDugMoveState::Update(dae::GameObject *, float deltaTime)
+dae::IState * DigDugMoveState::Update(const std::weak_ptr<dae::GameObject>&, float deltaTime)
 {
 	if (m_pPlayerComponent.lock()->GetDirection() == glm::vec2{0,0})
 		return new DigDugIdleState();
@@ -69,12 +69,12 @@ dae::IState * DigDugMoveState::Update(dae::GameObject *, float deltaTime)
 	return nullptr;
 }
 
-void DigDugIdleState::Enter(dae::GameObject * gameObject)
+void DigDugIdleState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	m_pPlayerComponent = gameObject->GetComponent<DigDugPlayerComponent>();
+	m_pPlayerComponent = gameObject.lock()->GetComponent<DigDugPlayerComponent>();
 }
 
-dae::IState * DigDugIdleState::Update(dae::GameObject *, float)
+dae::IState * DigDugIdleState::Update(const std::weak_ptr<dae::GameObject>&, float)
 {
 	if (m_pPlayerComponent.lock()->GetDirection() != glm::vec2{0,0})
 		return new DigDugMoveState();
@@ -85,10 +85,10 @@ dae::IState * DigDugIdleState::Update(dae::GameObject *, float)
 	return nullptr;
 }
 
-void DigDugPumpState::Enter(dae::GameObject * gameObject)
+void DigDugPumpState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	m_pPlayerComponent = gameObject->GetComponent<DigDugPlayerComponent>();
-	auto transform = gameObject->GetComponent<dae::TransformComponent>();
+	m_pPlayerComponent = gameObject.lock()->GetComponent<DigDugPlayerComponent>();
+	auto transform = gameObject.lock()->GetComponent<dae::TransformComponent>();
 	auto pos = transform.lock()->GetPosition();
 	auto forward = m_pPlayerComponent.lock()->GetForward();
 	auto pLevel = m_pPlayerComponent.lock()->GetLevel();
@@ -97,7 +97,7 @@ void DigDugPumpState::Enter(dae::GameObject * gameObject)
 	dae::SceneManager::GetInstance().GetActiveScene().lock()->Add(pumpObject);
 }
 
-dae::IState * DigDugPumpState::Update(dae::GameObject *, float deltaTime)
+dae::IState * DigDugPumpState::Update(const std::weak_ptr<dae::GameObject>&, float deltaTime)
 {
 	if (m_pPump.expired())
 	{
@@ -114,7 +114,7 @@ dae::IState * DigDugPumpState::Update(dae::GameObject *, float deltaTime)
 		{
 			if (!m_pPump.expired())
 			{
-				m_pPump.lock()->GetGameObject()->Destroy();
+				m_pPump.lock()->GetGameObject().lock()->Destroy();
 			}
 			return new DigDugMoveState();
 		}
@@ -132,22 +132,40 @@ dae::IState * DigDugPumpState::Update(dae::GameObject *, float deltaTime)
 	return nullptr;
 }
 
-void PookaMoveState::Enter(dae::GameObject * gameObject)
+void PookaMoveState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	m_pPlayerComponent = gameObject->GetComponent<PookaComponent>();
-	m_pTransformComponent = gameObject->GetComponent<dae::TransformComponent>();
+	m_pPlayerComponent = gameObject.lock()->GetComponent<PookaComponent>();
+	m_pTransformComponent = gameObject.lock()->GetComponent<dae::TransformComponent>();
 }
 
-dae::IState * PookaMoveState::Update(dae::GameObject *, float deltaTime)
+dae::IState * PookaMoveState::Update(const std::weak_ptr<dae::GameObject>&, float deltaTime)
 {
 	if (m_pPlayerComponent.lock()->GetDirection() == glm::vec2{ 0,0 })
 		return new PookaIdleState();
 	if (IsEventTriggered("Die"))
 		return new PookaDyingState();
+	if (m_GhostCoolDown > 0)
+		m_GhostCoolDown -= deltaTime;
+	else if (IsEventTriggered("ToggleGhost"))
+	{
+		return new PookaGhostState();
+	}
 
 	auto dir = m_pPlayerComponent.lock()->GetDirection();
 	auto pos = m_pTransformComponent.lock()->GetPosition();
 	auto tileCenter = m_pPlayerComponent.lock()->GetLevel().lock()->GetNearestTileCenter(pos);
+
+	if (abs(m_PrevDirection.x) > 0 && abs(dir.x))
+	{
+		m_PrevDirection.x = dir.x;
+		m_pPlayerComponent.lock()->SetForward(dir);
+	}
+
+	if (abs(m_PrevDirection.y) > 0 && abs(dir.y))
+	{
+		m_PrevDirection.y = dir.y;
+		m_pPlayerComponent.lock()->SetForward(dir);
+	}
 
 	if (m_PrevDirection.y == 0.f && abs(dir.y) > 0.f)
 	{
@@ -184,26 +202,32 @@ dae::IState * PookaMoveState::Update(dae::GameObject *, float deltaTime)
 	return nullptr;
 }
 
-void PookaIdleState::Enter(dae::GameObject * gameObject)
+void PookaIdleState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	m_pPlayerComponent = gameObject->GetComponent<PookaComponent>();
+	m_pPlayerComponent = gameObject.lock()->GetComponent<PookaComponent>();
 }
 
-dae::IState * PookaIdleState::Update(dae::GameObject *, float)
+dae::IState * PookaIdleState::Update(const std::weak_ptr<dae::GameObject>&, float deltaTime)
 {
 	if (m_pPlayerComponent.lock()->GetDirection() != glm::vec2{ 0,0 })
 		return new PookaMoveState();
 	if (IsEventTriggered("Die"))
 		return new PookaDyingState();
+	if (m_GhostCoolDown > 0)
+		m_GhostCoolDown -= deltaTime;
+	else if (IsEventTriggered("ToggleGhost"))
+	{
+		return new PookaGhostState();
+	}
 	return nullptr;
 }
 
-void PookaDyingState::Enter(dae::GameObject * gameObject)
+void PookaDyingState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
 	dae::Sprite m_BlowUpSprite{ "PookaBlowUp.png", 1, 4 };
 
-	gameObject->GetComponent<dae::ColliderComponent>().lock()->SetTag("DyingEnemy");
-	m_pSpriteComp = gameObject->GetComponent<dae::SpriteComponent>();
+	gameObject.lock()->GetComponent<dae::ColliderComponent>().lock()->SetTag("DyingEnemy");
+	m_pSpriteComp = gameObject.lock()->GetComponent<dae::SpriteComponent>();
 	m_pSpriteComp.lock()->SetSprite(m_BlowUpSprite);
 	m_pSpriteComp.lock()->SetTargetWidth(30.f);
 	m_pSpriteComp.lock()->SetTargetHeight(30.f);
@@ -211,7 +235,18 @@ void PookaDyingState::Enter(dae::GameObject * gameObject)
 	m_pSpriteComp.lock()->SetCurrentFrame(0);
 }
 
-dae::IState * PookaDyingState::Update(dae::GameObject * gameObject, float deltaTime)
+void PookaDyingState::Exit(const std::weak_ptr<dae::GameObject>& gameObject)
+{
+	dae::Sprite m_WalkSprite{ "PookaWalk.png", 1, 2 };
+	m_pSpriteComp = gameObject.lock()->GetComponent<dae::SpriteComponent>();
+	m_pSpriteComp.lock()->SetSprite(m_WalkSprite);
+	m_pSpriteComp.lock()->SetTargetWidth(20.f);
+	m_pSpriteComp.lock()->SetTargetHeight(20.f);
+	m_pSpriteComp.lock()->SetPlaySpeed(1.f);
+	gameObject.lock()->GetComponent<dae::ColliderComponent>().lock()->SetTag("Enemy");
+}
+
+dae::IState * PookaDyingState::Update(const std::weak_ptr<dae::GameObject>& gameObject, float deltaTime)
 {
 	m_ElapsedSec += deltaTime;
 	if (IsEventTriggered("Die"))
@@ -219,7 +254,7 @@ dae::IState * PookaDyingState::Update(dae::GameObject * gameObject, float deltaT
 		m_ElapsedSec = 0;
 		--m_Health;
 		if (m_Health == 0)
-			gameObject->Destroy();
+			gameObject.lock()->Destroy();
 	}
 	else if (m_ElapsedSec > m_DeflateTime) {
 
@@ -232,4 +267,57 @@ dae::IState * PookaDyingState::Update(dae::GameObject * gameObject, float deltaT
 	}
 	m_pSpriteComp.lock()->SetCurrentFrame(m_MaxHealth - m_Health);
 	return nullptr;
+}
+
+void PookaGhostState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
+{
+	dae::Sprite m_GhostSprite{ "PookaGhost.png", 1, 2 };
+	m_pSpriteComp = gameObject.lock()->GetComponent<dae::SpriteComponent>();
+	m_pSpriteComp.lock()->SetSprite(m_GhostSprite);
+	m_wpPookaComponent = gameObject.lock()->GetComponent<PookaComponent>();
+	m_wpTransformComponent = gameObject.lock()->GetComponent<dae::TransformComponent>();
+	m_wpPookaComponent.lock()->SetGhost(true);
+}
+
+dae::IState * PookaGhostState::Update(const std::weak_ptr<dae::GameObject>&, float deltaTime)
+{
+	if (IsEventTriggered("Die"))
+		return new PookaDyingState();
+
+	auto spTransform = m_wpTransformComponent.lock();
+	auto spPooka = m_wpPookaComponent.lock();
+
+	if (m_MinGhostDuration > 0)
+		m_MinGhostDuration -= deltaTime;
+	else if (IsEventTriggered("ToggleGhost"))
+	{
+		auto pos = spTransform->GetPosition();
+		if (spPooka->GetLevel().lock()->GetTile(pos).lock()->IsSolid())
+			return nullptr;
+		auto tileCenter = spPooka->GetLevel().lock()->GetNearestTileCenter(pos);
+		if (abs(tileCenter.y - pos.y) < m_GridSnap)
+		{
+			spTransform->SetPosition(glm::vec3(pos.x, tileCenter.y, 0.f));
+			return new PookaIdleState();
+		}
+		if (abs(tileCenter.x - pos.x) < m_GridSnap)
+		{
+			spTransform->SetPosition(glm::vec3(tileCenter.x, pos.y, 0.f));
+			return new PookaIdleState();
+		}
+
+	}
+	auto dir = spPooka->GetDirection();
+	spPooka->SetForward(dir);
+	glm::vec3 movementVector = glm::vec3(dir.x, dir.y, 0) * m_Speed * deltaTime;
+	spTransform->Translate(movementVector);
+	return nullptr;
+}
+
+void PookaGhostState::Exit(const std::weak_ptr<dae::GameObject>& gameObject)
+{
+	dae::Sprite m_WalkSprite{ "PookaWalk.png", 1, 2 };
+	m_pSpriteComp = gameObject.lock()->GetComponent<dae::SpriteComponent>();
+	m_pSpriteComp.lock()->SetSprite(m_WalkSprite);
+	m_wpPookaComponent.lock()->SetGhost(false);
 }

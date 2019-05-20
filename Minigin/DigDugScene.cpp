@@ -13,31 +13,31 @@
 #include "PookaComponent.h"
 #include "DigDugPrefabs.h"
 
+
 void DigDugScene::Initialize()
 {
-	m_Level = new dae::GameObject();
+	m_Level = std::make_shared<dae::GameObject>();
 	m_Level->AddComponent(std::make_shared<dae::TransformComponent>(glm::vec3(0.f, 0.f, 0.f)));
 	auto levelComp = std::make_shared<DigDugLevelComponent>("Level1.gr", 400.f, 400.f);
 	m_Level->AddComponent(levelComp);
 	Add(m_Level);
 
-	m_Player = new dae::GameObject();
+	/*m_Player = std::make_shared<dae::GameObject>();
 	auto spawnPos = levelComp->GetNearestTileCenter(glm::vec2{ 180.f, 20.f });
 	m_Player->AddComponent(std::make_shared<dae::TransformComponent>(glm::vec3(spawnPos.x, spawnPos.y, 0.f)));
 	m_Player->AddComponent(std::make_shared<dae::SpriteComponent>("../Data/DigDug.png", 1, 2, 20.f, 20.f));
+	m_Player->AddComponent(std::make_shared<dae::ColliderComponent>(dae::Rect{ glm::vec2{0.f,0.f }, 19.f, 19.f }, "Player"));
 	m_Player->AddComponent(std::make_shared<DigDugPlayerComponent>(levelComp));
-	Add(m_Player);
+	Add(m_Player);*/
 
-	//Add(DigDugPrefabs::CreatePooka({ 180.f, 60.f }, levelComp));
+	auto pooka = DigDugPrefabs::CreatePooka({ 180.f, 60.f }, levelComp);
+	Add(pooka);
 
-	/*m_PlayerController = dae::InputManager::GetInstance().GetPlayerControllers(0);
-	m_PlayerController->AddCommand(dae::ControllerButton::DpadRight ,std::make_shared<DigDugMoveCmd>(glm::vec2{ 1, 0 }));
-	m_PlayerController->AddCommand(dae::ControllerButton::DpadLeft, std::make_shared<DigDugMoveCmd>(glm::vec2{ -1, 0 }));
-	m_PlayerController->AddCommand(dae::ControllerButton::DpadUp, std::make_shared<DigDugMoveCmd>(glm::vec2{ 0, -1 }));
-	m_PlayerController->AddCommand(dae::ControllerButton::DpadDown, std::make_shared<DigDugMoveCmd>(glm::vec2{ 0, 1 }));
-	m_PlayerController->AddCommand(dae::ControllerButton::ButtonA, std::make_shared<DigDugPumpCommand>());
+	pooka = DigDugPrefabs::CreatePooka({ 180.f, 80.f }, levelComp);
+	Add(pooka);
 
-	m_PlayerController->Posses(m_Player);*/
+	pooka = DigDugPrefabs::CreatePooka({ 180.f, 100.f }, levelComp);
+	Add(pooka);
 
 	Scene::Initialize();
 	
@@ -58,6 +58,7 @@ void DigDugScene::Update(float deltaTime)
 	{
 		m_Level->GetComponent<DigDugLevelComponent>().lock()->Save("Level1.gr");
 	}
+	
 }
 
 DigDugScene::~DigDugScene()

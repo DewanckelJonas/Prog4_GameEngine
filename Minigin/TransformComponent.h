@@ -11,11 +11,11 @@ namespace dae
 	public:
 		TransformComponent(const glm::vec3& pos){ m_Transform.Position = pos; };
 		void SetPosition(const glm::vec3& pos) { m_Transform.Position = pos; }
-		glm::vec3 GetPosition() { return m_Transform.Position; }
-		glm::vec2 GetScale() { return m_Transform.Scale; }
+		glm::vec3 GetPosition() const { return m_Transform.Position; }
+		glm::vec2 GetScale() const { return m_Transform.Scale; }
 		void SetScale(const glm::vec2& scale) { m_Transform.Scale = scale; }
 		void SetRotation(float angle) { m_Transform.Rotation = angle; }
-		float GetRotation() { return m_Transform.Rotation; }
+		float GetRotation() const { return m_Transform.Rotation; }
 		void Translate(const glm::vec3& translation) { m_Transform.Position += translation; }
 
 
@@ -31,7 +31,7 @@ namespace dae
 	{
 	public:
 		MoveCmd(glm::vec3 direction, float speed) : m_Direction(direction), m_Speed(speed) {}
-		void Execute() override { GetActor()->GetComponent<TransformComponent>().lock()->Translate(m_Speed * m_Direction); }
+		void Execute() override { GetActor().lock()->GetComponent<TransformComponent>().lock()->Translate(m_Speed * m_Direction); }
 
 	private:
 		float m_Speed;

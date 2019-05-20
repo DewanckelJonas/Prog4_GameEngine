@@ -6,7 +6,7 @@ class ColliderComponent;
 
 namespace dae
 {
-	class GameObject final
+	class GameObject final : public std::enable_shared_from_this<GameObject>
 	{
 	public:
 		void Initialize();
@@ -22,6 +22,17 @@ namespace dae
 			for (auto spComponent : m_spComponents)
 			{
 				std::shared_ptr<T> result = std::dynamic_pointer_cast<T>(spComponent);
+				if (result) return result;
+			}
+			return {};
+		}
+
+		template<class T>
+		std::weak_ptr<const T> GetComponent() const
+		{
+			for (auto spComponent : m_spComponents)
+			{
+				std::shared_ptr<const T> result = std::dynamic_pointer_cast<T>(spComponent);
 				if (result) return result;
 			}
 			return {};

@@ -50,7 +50,7 @@ namespace dae
 		void SetCommand(ControllerButton button, const std::shared_ptr<BaseCommand>& pCommand, size_t controllerIdx = 0);
 		std::shared_ptr<BaseCommand> GetCommand(ControllerButton button, size_t controllerIdx = 0) const;
 		void ClearButton(ControllerButton button, size_t controllerIdx = 0);
-		std::shared_ptr<BaseCommand> HandleInput(size_t controllerIdx) const;
+		std::vector<std::shared_ptr<BaseCommand>> HandleInput(size_t controllerIdx) const;
 		size_t GetMaxNrOfControllers() { return m_MaxNrOfControllers; }
 		void ClearCommands(size_t controllerIdx);
 		PlayerController* GetPlayerControllers(size_t controllerIdx);

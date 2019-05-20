@@ -191,11 +191,14 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AIController.h" />
+    <ClInclude Include="AISystem.h" />
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="DigDugPlayerComponent.h" />
     <ClInclude Include="DigDugPlayerStates.h" />
     <ClInclude Include="DigDugPrefabs.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="PookaAI.h" />
     <ClInclude Include="PookaComponent.h" />
     <ClInclude Include="PumpComponent.h" />
     <ClInclude Include="Tile.h" />
@@ -232,10 +235,12 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AISystem.cpp" />
     <ClCompile Include="DigDugPlayerComponent.cpp" />
     <ClCompile Include="DigDugPlayerStates.cpp" />
     <ClCompile Include="DigDugPrefabs.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="PookaAI.cpp" />
     <ClCompile Include="PookaComponent.cpp" />
     <ClCompile Include="PumpComponent.cpp" />
     <ClCompile Include="Tile.cpp" />

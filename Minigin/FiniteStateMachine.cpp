@@ -14,23 +14,23 @@ dae::FiniteStateMachine::~FiniteStateMachine()
 	delete m_pState;
 }
 
-void dae::FiniteStateMachine::Initialize(GameObject * gameObject)
+void dae::FiniteStateMachine::Initialize(const std::weak_ptr<GameObject>& wpGameObject)
 {
-	m_pState->Enter(gameObject);
+	m_pState->Enter(wpGameObject);
 }
 
-void dae::FiniteStateMachine::Update(float deltaTime, GameObject* gameObject)
+void dae::FiniteStateMachine::Update(float deltaTime, const std::weak_ptr<GameObject>& wpGameObject)
 {
-	IState* pNewState = m_pState->Update(gameObject, deltaTime);
+	IState* pNewState = m_pState->Update(wpGameObject, deltaTime);
 	if (pNewState != nullptr)
 	{
 		pNewState->SetStateMachine(this);
-		m_pState->Exit(gameObject);
+		m_pState->Exit(wpGameObject);
 		delete m_pState;
 		m_pState = pNewState;
 
 		// Call the enter action on the new state.
-		m_pState->Enter(gameObject);
+		m_pState->Enter(wpGameObject);
 	}
 	for (auto it = m_Events.begin(); it != m_Events.end(); ++it)
 	{

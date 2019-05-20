@@ -14,7 +14,7 @@ private:
 	bool m_IsSolid;
 };
 
-class DigDugLevelComponent final : public BaseComponent
+class DigDugLevelComponent final : public BaseComponent, public std::enable_shared_from_this<DigDugLevelComponent>
 {
 public:
 
@@ -38,10 +38,14 @@ public:
 	float GetTileHeight() { return m_Grid.GetTileHeight(); }
 
 	void SetTile(const glm::vec2& pos, TileType type);
-	std::weak_ptr<DigDugTile> GetTile(const glm::vec2& pos) const;
+	std::weak_ptr<const DigDugTile> GetTile(const glm::vec2& pos) const;
+	std::weak_ptr<const DigDugTile> GetTile(unsigned short row, unsigned short col) const;
+	void GetTileRowCol(const glm::vec2& pos, unsigned short& row, unsigned short& col) const;
 	glm::vec2 GetNearestTileCenter(const glm::vec2& pos) const;
+	glm::vec2 GetClosestPlayerPosition(const glm::vec2& pos) const;
 
 private:
+	std::vector<std::weak_ptr<const dae::GameObject>> m_wpPlayers;
 	dae::Grid m_Grid;
 };
 

@@ -18,7 +18,7 @@ dae::ColliderComponent::~ColliderComponent()
 
 void dae::ColliderComponent::Initialize()
 {
-	m_pTransform = GetGameObject()->GetComponent<TransformComponent>();
+	m_pTransform = GetGameObject().lock()->GetComponent<TransformComponent>();
 }
 
 void dae::ColliderComponent::Update(float)

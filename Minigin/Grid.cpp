@@ -45,7 +45,7 @@ void dae::Grid::SetTile(unsigned char tileId, unsigned short rowIdx, unsigned sh
 	m_Grid[rowIdx*m_Cols + colIdx] = tileId;
 }
 
-std::weak_ptr<dae::Tile> dae::Grid::GetTile(unsigned short rowIdx, unsigned short colIdx) const
+std::weak_ptr<const dae::Tile> dae::Grid::GetTile(unsigned short rowIdx, unsigned short colIdx) const
 {
 	return m_TileSet[m_Grid[rowIdx*m_Cols + colIdx]];
 }

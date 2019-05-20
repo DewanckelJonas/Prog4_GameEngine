@@ -7,7 +7,7 @@ dae::PlayerController::~PlayerController()
 	InputManager::GetInstance().ClearCommands(0);
 }
 
-void dae::PlayerController::Posses(GameObject * pActor)
+void dae::PlayerController::Posses(const std::weak_ptr<GameObject>& pActor)
 {
 	m_pPossesedActor = pActor;
 

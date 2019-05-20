@@ -9,7 +9,8 @@ namespace dae { class GameObject;  }
 class DigDugLevelComponent;
 namespace DigDugPrefabs
 {
-	dae::GameObject* CreatePump(const glm::vec2& position, const glm::vec2& direction, const std::weak_ptr<DigDugLevelComponent>& wpLevel);
-	dae::GameObject* CreatePooka(const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel);
+	std::shared_ptr<dae::GameObject> CreatePump(const glm::vec2& position, const glm::vec2& direction, const std::weak_ptr<DigDugLevelComponent>& wpLevel);
+	std::shared_ptr<dae::GameObject> CreatePooka(const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel);
+	std::shared_ptr<dae::GameObject> CreateDigDug(int playerIndex, const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel);
 }
 

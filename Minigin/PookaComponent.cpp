@@ -8,6 +8,7 @@ PookaComponent::PookaComponent(const std::weak_ptr<DigDugLevelComponent>& wpLeve
 {
 	m_StateMachine = std::make_shared<dae::FiniteStateMachine>(new PookaIdleState());
 	m_StateMachine->AddEvent("Die");
+	m_StateMachine->AddEvent("ToggleGhost");
 }
 
 
@@ -16,14 +17,20 @@ void PookaComponent::Die()
 	m_StateMachine->TriggerEvent("Die");
 }
 
+void PookaComponent::ToggleGhost()
+{
+	m_StateMachine->TriggerEvent("ToggleGhost");
+}
+
 void PookaComponent::Initialize()
 {
 	m_StateMachine->Initialize(GetGameObject());
-	m_pTransform = GetGameObject()->GetComponent<dae::TransformComponent>();
+	m_pTransform = GetGameObject().lock()->GetComponent<dae::TransformComponent>();
 }
 
 void PookaComponent::Update(float deltaTime)
 {
+	std::cout << m_MoveDirection.x << m_MoveDirection.y << std::endl;
 	m_StateMachine->Update(deltaTime, GetGameObject());
 	//Give Player The Right Transform depending on m_Forward
 	if (abs(m_Forward.y) > 0)

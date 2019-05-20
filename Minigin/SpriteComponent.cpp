@@ -41,7 +41,7 @@ void dae::SpriteComponent::Update(float deltaTime)
 
 void dae::SpriteComponent::Render() const
 {
-	auto transform = GetGameObject()->GetComponent<TransformComponent>().lock();
+	auto transform = GetGameObject().lock()->GetComponent<TransformComponent>().lock();
 	auto pos = transform->GetPosition();
 	float angle = transform->GetRotation();
 	auto scale = transform->GetScale();

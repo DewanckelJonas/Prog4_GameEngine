@@ -13,11 +13,12 @@ public:
 	virtual void Initialize() = 0;
 	virtual void Update(float deltaTime) = 0;
 	virtual void Render() const = 0;
-	dae::GameObject* GetGameObject() const { return m_GameObject; };
+	std::weak_ptr<dae::GameObject> GetGameObject() { return m_GameObject; };
+	std::weak_ptr<const dae::GameObject> GetGameObject() const { return m_GameObject; }
 
 	friend void dae::GameObject::AddComponent(std::shared_ptr<BaseComponent> pComponent);
 
 private:
-	dae::GameObject* m_GameObject{nullptr};
+	std::weak_ptr<dae::GameObject> m_GameObject{};
 };
 
