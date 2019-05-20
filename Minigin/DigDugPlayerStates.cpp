@@ -7,9 +7,11 @@
 #include "PumpComponent.h"
 #include "SceneManager.h"
 #include "Scene.h"
-#include "PookaComponent.h"
+#include "DigDugEnemyComponent.h"
 #include"SpriteComponent.h"
 #include "ColliderComponent.h"
+#include "FygarFireComponent.h"
+
 void DigDugMoveState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
 	m_pPlayerComponent = gameObject.lock()->GetComponent<DigDugPlayerComponent>();
@@ -28,6 +30,7 @@ dae::IState * DigDugMoveState::Update(const std::weak_ptr<dae::GameObject>&, flo
 		return new DigDugPumpState();
 	if (IsEventTriggered("Die"))
 		return new DigDugDyingState();
+
 	
 	std::cout << m_pPlayerComponent.lock()->GetForward().x << m_pPlayerComponent.lock()->GetForward().y << std::endl;
 
@@ -134,7 +137,7 @@ dae::IState * DigDugPumpState::Update(const std::weak_ptr<dae::GameObject>&, flo
 
 void PookaMoveState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	m_pPlayerComponent = gameObject.lock()->GetComponent<PookaComponent>();
+	m_pPlayerComponent = gameObject.lock()->GetComponent<DigDugEnemyComponent>();
 	m_pTransformComponent = gameObject.lock()->GetComponent<dae::TransformComponent>();
 }
 
@@ -149,6 +152,10 @@ dae::IState * PookaMoveState::Update(const std::weak_ptr<dae::GameObject>&, floa
 	else if (IsEventTriggered("ToggleGhost"))
 	{
 		return new PookaGhostState();
+	}
+	if(IsEventTriggered("Fire"))
+	{
+		return new EnemyFireState();
 	}
 
 	auto dir = m_pPlayerComponent.lock()->GetDirection();
@@ -204,7 +211,7 @@ dae::IState * PookaMoveState::Update(const std::weak_ptr<dae::GameObject>&, floa
 
 void PookaIdleState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	m_pPlayerComponent = gameObject.lock()->GetComponent<PookaComponent>();
+	m_pPlayerComponent = gameObject.lock()->GetComponent<DigDugEnemyComponent>();
 }
 
 dae::IState * PookaIdleState::Update(const std::weak_ptr<dae::GameObject>&, float deltaTime)
@@ -219,16 +226,19 @@ dae::IState * PookaIdleState::Update(const std::weak_ptr<dae::GameObject>&, floa
 	{
 		return new PookaGhostState();
 	}
+	if (IsEventTriggered("Fire"))
+	{
+		return new EnemyFireState();
+	}
 	return nullptr;
 }
 
 void PookaDyingState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	dae::Sprite m_BlowUpSprite{ "PookaBlowUp.png", 1, 4 };
-
-	gameObject.lock()->GetComponent<dae::ColliderComponent>().lock()->SetTag("DyingEnemy");
 	m_pSpriteComp = gameObject.lock()->GetComponent<dae::SpriteComponent>();
-	m_pSpriteComp.lock()->SetSprite(m_BlowUpSprite);
+	gameObject.lock()->GetComponent<dae::ColliderComponent>().lock()->SetTag("DyingEnemy");
+	auto sprite = gameObject.lock()->GetComponent<DigDugEnemyComponent>().lock()->GetBlowUpSprite();
+	m_pSpriteComp.lock()->SetSprite(sprite);
 	m_pSpriteComp.lock()->SetTargetWidth(30.f);
 	m_pSpriteComp.lock()->SetTargetHeight(30.f);
 	m_pSpriteComp.lock()->SetPlaySpeed(0.f);
@@ -237,9 +247,7 @@ void PookaDyingState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 
 void PookaDyingState::Exit(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	dae::Sprite m_WalkSprite{ "PookaWalk.png", 1, 2 };
-	m_pSpriteComp = gameObject.lock()->GetComponent<dae::SpriteComponent>();
-	m_pSpriteComp.lock()->SetSprite(m_WalkSprite);
+	m_pSpriteComp.lock()->SetSprite(gameObject.lock()->GetComponent<DigDugEnemyComponent>().lock()->GetWalkSprite());
 	m_pSpriteComp.lock()->SetTargetWidth(20.f);
 	m_pSpriteComp.lock()->SetTargetHeight(20.f);
 	m_pSpriteComp.lock()->SetPlaySpeed(1.f);
@@ -271,10 +279,9 @@ dae::IState * PookaDyingState::Update(const std::weak_ptr<dae::GameObject>& game
 
 void PookaGhostState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	dae::Sprite m_GhostSprite{ "PookaGhost.png", 1, 2 };
 	m_pSpriteComp = gameObject.lock()->GetComponent<dae::SpriteComponent>();
-	m_pSpriteComp.lock()->SetSprite(m_GhostSprite);
-	m_wpPookaComponent = gameObject.lock()->GetComponent<PookaComponent>();
+	m_pSpriteComp.lock()->SetSprite(gameObject.lock()->GetComponent<DigDugEnemyComponent>().lock()->GetGhostSprite());
+	m_wpPookaComponent = gameObject.lock()->GetComponent<DigDugEnemyComponent>();
 	m_wpTransformComponent = gameObject.lock()->GetComponent<dae::TransformComponent>();
 	m_wpPookaComponent.lock()->SetGhost(true);
 }
@@ -316,8 +323,51 @@ dae::IState * PookaGhostState::Update(const std::weak_ptr<dae::GameObject>&, flo
 
 void PookaGhostState::Exit(const std::weak_ptr<dae::GameObject>& gameObject)
 {
-	dae::Sprite m_WalkSprite{ "PookaWalk.png", 1, 2 };
 	m_pSpriteComp = gameObject.lock()->GetComponent<dae::SpriteComponent>();
-	m_pSpriteComp.lock()->SetSprite(m_WalkSprite);
+	m_pSpriteComp.lock()->SetSprite(gameObject.lock()->GetComponent<DigDugEnemyComponent>().lock()->GetWalkSprite());
 	m_wpPookaComponent.lock()->SetGhost(false);
+}
+
+void EnemyFireState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
+{
+	m_wpEnemyComponent = gameObject.lock()->GetComponent<DigDugEnemyComponent>();
+	m_wpSpriteComponent = gameObject.lock()->GetComponent<dae::SpriteComponent>();
+	m_wpSpriteComponent.lock()->SetSprite(gameObject.lock()->GetComponent<DigDugEnemyComponent>().lock()->GetChargeSprite());
+	
+}
+
+dae::IState * EnemyFireState::Update(const std::weak_ptr<dae::GameObject>& gameObject, float deltaTime)
+{
+	if (IsEventTriggered("Die"))
+	{
+		if (!m_wpFire.expired())
+			m_wpFire.lock()->GetGameObject().lock()->Destroy();
+		return new PookaDyingState();
+	}
+
+	m_ChargeDuration -= deltaTime;
+	if (m_ChargeDuration < 0)
+	{
+		if(!m_IsFiring)
+		{
+			auto transform = gameObject.lock()->GetComponent<dae::TransformComponent>();
+			auto pos = transform.lock()->GetPosition();
+			auto forward = m_wpEnemyComponent.lock()->GetForward();
+			auto pLevel = m_wpEnemyComponent.lock()->GetLevel();
+			auto fireObject = DigDugPrefabs::CreateFire({ pos.x, pos.y }, forward, pLevel);
+			m_wpFire = fireObject->GetComponent<FygarFireComponent>();
+			dae::SceneManager::GetInstance().GetActiveScene().lock()->Add(fireObject);
+			m_IsFiring = true;
+		}
+		if(m_wpFire.expired())
+		{
+			return new PookaIdleState();
+		}
+	}
+	return nullptr;
+}
+
+void EnemyFireState::Exit(const std::weak_ptr<dae::GameObject>& gameObject)
+{
+	m_wpSpriteComponent.lock()->SetSprite(gameObject.lock()->GetComponent<DigDugEnemyComponent>().lock()->GetWalkSprite());
 }

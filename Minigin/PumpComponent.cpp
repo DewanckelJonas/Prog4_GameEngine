@@ -3,7 +3,7 @@
 #include "ColliderComponent.h"
 #include "TextureComponent.h"
 #include "DigDugLevelComponent.h"
-#include "PookaComponent.h"
+#include "DigDugEnemyComponent.h"
 
 
 PumpComponent::PumpComponent(float speed, float lifeTime, glm::vec2 direction, const std::weak_ptr<DigDugLevelComponent>& pLevel)
@@ -63,10 +63,14 @@ void PumpComponent::Pump()
 {
 	if(m_pVictim.lock())
 	{
-		m_ElapsedSec = 0;
-		m_pVictim.lock()->GetComponent<PookaComponent>().lock()->Die();
+		m_pVictim.lock()->GetComponent<DigDugEnemyComponent>().lock()->Die();
 		if (m_pVictim.lock()->IsDestroyed())
 			GetGameObject().lock()->Destroy();
+		else
+			m_ElapsedSec = 0;
+	}else
+	{
+		GetGameObject().lock()->Destroy();
 	}
 }
 

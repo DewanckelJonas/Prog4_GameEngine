@@ -13,6 +13,9 @@
 #include "DigDugPlayerComponent.h"
 #include "InputManager.h"
 #include "PlayerController.h"
+#include "FygarFireComponent.h"
+#include "FygarComponent.h"
+#include "RockComponent.h"
 
 
 std::shared_ptr<dae::GameObject> DigDugPrefabs::CreatePump(const glm::vec2& position, const glm::vec2& direction, const std::weak_ptr<DigDugLevelComponent>& wpLevel)
@@ -25,6 +28,18 @@ std::shared_ptr<dae::GameObject> DigDugPrefabs::CreatePump(const glm::vec2& posi
 	pump->AddComponent(std::make_shared<dae::TextureComponent>("Pump.png", false));
 	pump->AddComponent(std::make_shared<PumpComponent>(110.f, 0.6f, direction, wpLevel));
 	return pump;
+}
+
+std::shared_ptr<dae::GameObject> DigDugPrefabs::CreateFire(const glm::vec2& position, const glm::vec2& direction, const std::weak_ptr<DigDugLevelComponent>& wpLevel)
+{
+	auto fire = std::make_shared<dae::GameObject>();
+	auto transform = std::make_shared<dae::TransformComponent>(glm::vec3(position.x, position.y, 0.f));
+	transform->SetRotation(atan2f(direction.y, direction.x) / 3.14f*180.f);
+	fire->AddComponent(transform);
+	fire->AddComponent(std::make_shared<dae::ColliderComponent>(dae::Rect{ glm::vec2(0.1f, 0.f), wpLevel.lock()->GetTileWidth(), wpLevel.lock()->GetTileHeight() }, "Fire"));
+	fire->AddComponent(std::make_shared<dae::TextureComponent>("FygarFire.png", false));
+	fire->AddComponent(std::make_shared<FygarFireComponent>(50.f, 1.f, direction, wpLevel));
+	return fire;
 }
 
 std::shared_ptr<dae::GameObject> DigDugPrefabs::CreatePooka(const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel)
@@ -40,13 +55,40 @@ std::shared_ptr<dae::GameObject> DigDugPrefabs::CreatePooka(const glm::vec2& pos
 	return pooka;
 }
 
+std::shared_ptr<dae::GameObject> DigDugPrefabs::CreateFygar(const glm::vec2 & position, const std::weak_ptr<DigDugLevelComponent> wpLevel)
+{
+	auto fygar = std::make_shared<dae::GameObject>();
+	auto spawnPos = wpLevel.lock()->GetNearestTileCenter(position);
+	fygar->AddComponent(std::make_shared<dae::ColliderComponent>(dae::Rect{ glm::vec2(0.1f, 0.f), wpLevel.lock()->GetTileWidth(), wpLevel.lock()->GetTileHeight() }, "Enemy"));
+	fygar->AddComponent(std::make_shared<dae::TransformComponent>(glm::vec3(spawnPos.x, spawnPos.y, 0.f)));
+	fygar->AddComponent(std::make_shared<dae::SpriteComponent>("../Data/FygarWalk.png", 1, 2, wpLevel.lock()->GetTileWidth(), wpLevel.lock()->GetTileHeight()));
+	fygar->AddComponent(std::make_shared<FygarComponent>(wpLevel));
+	std::shared_ptr<PookaAI> enemyAI = std::make_shared<PookaAI>(fygar);
+	dae::AISystem::GetInstance().AddAIController(enemyAI);
+	return fygar;
+}
+
+std::shared_ptr<dae::GameObject> DigDugPrefabs::CreateRock(const glm::vec2 & position, const std::weak_ptr<DigDugLevelComponent> wpLevel)
+{
+	auto rock = std::make_shared<dae::GameObject>();
+	auto spawnPos = wpLevel.lock()->GetNearestTileCenter(position);
+	rock->AddComponent(std::make_shared<dae::ColliderComponent>(dae::Rect{ glm::vec2(0.f, 0.f), wpLevel.lock()->GetTileWidth() -1, wpLevel.lock()->GetTileHeight()-1 }, "Rock"));
+	rock->AddComponent(std::make_shared<dae::TransformComponent>(glm::vec3(spawnPos.x, spawnPos.y, 0.f)));
+	auto textureComp = std::make_shared<dae::TextureComponent>("Rock.png");
+	textureComp->SetTargetHeight(wpLevel.lock()->GetTileHeight());
+	textureComp->SetTargetWidth(wpLevel.lock()->GetTileWidth());
+	rock->AddComponent(textureComp);
+	rock->AddComponent(std::make_shared<RockComponent>(wpLevel));
+	return rock;
+}
+
 std::shared_ptr<dae::GameObject> DigDugPrefabs::CreateDigDug(int playerIndex, const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel)
 {
 	auto player = std::make_shared<dae::GameObject>();
 	auto spawnPos = wpLevel.lock()->GetNearestTileCenter(position);
 	player->AddComponent(std::make_shared<dae::TransformComponent>(glm::vec3(spawnPos.x, spawnPos.y, 0.f)));
 	player->AddComponent(std::make_shared<dae::SpriteComponent>("../Data/DigDug.png", 1, 2, 20.f, 20.f));
-	player->AddComponent(std::make_shared<dae::ColliderComponent>(dae::Rect{ glm::vec2{0.f,0.f }, 19.f, 19.f }, "Player"));
+	player->AddComponent(std::make_shared<dae::ColliderComponent>(dae::Rect{ glm::vec2{0.f,0.f }, 15.f, 15.f }, "Player"));
 	player->AddComponent(std::make_shared<DigDugPlayerComponent>(wpLevel));
 
 	auto playerController = dae::InputManager::GetInstance().GetPlayerControllers(playerIndex);

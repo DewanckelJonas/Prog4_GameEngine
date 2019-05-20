@@ -5,12 +5,7 @@
 #include "TextureComponent.h"
 #include "SpriteComponent.h"
 #include "InputManager.h"
-#include "PlayerController.h"
-#include "DigDugPlayerComponent.h"
 #include "DigDugLevelComponent.h"
-#include "ColliderComponent.h"
-#include "PumpComponent.h"
-#include "PookaComponent.h"
 #include "DigDugPrefabs.h"
 
 
@@ -22,22 +17,17 @@ void DigDugScene::Initialize()
 	m_Level->AddComponent(levelComp);
 	Add(m_Level);
 
-	/*m_Player = std::make_shared<dae::GameObject>();
-	auto spawnPos = levelComp->GetNearestTileCenter(glm::vec2{ 180.f, 20.f });
-	m_Player->AddComponent(std::make_shared<dae::TransformComponent>(glm::vec3(spawnPos.x, spawnPos.y, 0.f)));
-	m_Player->AddComponent(std::make_shared<dae::SpriteComponent>("../Data/DigDug.png", 1, 2, 20.f, 20.f));
-	m_Player->AddComponent(std::make_shared<dae::ColliderComponent>(dae::Rect{ glm::vec2{0.f,0.f }, 19.f, 19.f }, "Player"));
-	m_Player->AddComponent(std::make_shared<DigDugPlayerComponent>(levelComp));
-	Add(m_Player);*/
-
-	auto pooka = DigDugPrefabs::CreatePooka({ 180.f, 60.f }, levelComp);
+	/*auto pooka = DigDugPrefabs::CreatePooka({ 180.f, 60.f }, levelComp);
 	Add(pooka);
 
 	pooka = DigDugPrefabs::CreatePooka({ 180.f, 80.f }, levelComp);
-	Add(pooka);
+	Add(pooka);*/
 
-	pooka = DigDugPrefabs::CreatePooka({ 180.f, 100.f }, levelComp);
-	Add(pooka);
+	auto fygar = DigDugPrefabs::CreateFygar({ 180.f, 100.f }, levelComp);
+	Add(fygar);
+
+	auto rock = DigDugPrefabs::CreateRock({ 180.f, 60.f }, levelComp);
+	Add(rock);
 
 	Scene::Initialize();
 	

@@ -129,9 +129,6 @@
     <ClInclude Include="DigDugPrefabs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PookaComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AIController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -139,6 +136,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PookaAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FygarComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DigDugEnemyComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PookaComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FygarFireComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RockComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -230,13 +242,22 @@
     <ClCompile Include="DigDugPrefabs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PookaComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AISystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PookaAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FygarComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DigDugEnemyComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FygarFireComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RockComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
