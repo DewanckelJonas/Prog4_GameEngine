@@ -4,7 +4,6 @@
 #include "Shapes.h"
 #include <ObserverComponent.h>
 class LivesComponent;
-
 class DigDugTile : public dae::Tile
 {
 public:
@@ -22,10 +21,13 @@ public:
 	enum class TileType
 	{
 		Air,
-		Ground
+		GroundL1,
+		GroundL2,
+		GroundL3,
+		GroundL4
 	};
 
-	DigDugLevelComponent(const std::string& filePath, float width, float height, const std::weak_ptr<LivesComponent>& livesComp);
+	DigDugLevelComponent(const std::string& filePath, float width, float height, const std::weak_ptr<dae::GameObject>& livesDisplay, const std::weak_ptr<dae::GameObject>& scoreDisplay);
 	DigDugLevelComponent(unsigned short rows, unsigned short cols, float width, float height);
 	~DigDugLevelComponent();
 
@@ -36,9 +38,18 @@ public:
 	void OnNotify(const std::string& event, const std::weak_ptr<dae::GameObject>& subject);
 
 	void Save(const std::string& path) const;
+	void AddPookaSpawnPosition(const glm::vec2& position);
+	void AddFygarSpawnPosition(const glm::vec2 & position);
+	void AddRockSpawnPosition(const glm::vec2 & position);
+	void ClearPookaSpawnPositions();
+	void ClearFygarSpawnPositions();
+	void ClearRockSpawnPositions();
+	void SetPlayerSpawnPosition(int id, const glm::vec2& position);
 
 	float GetTileWidth() { return m_Grid.GetTileWidth(); }
 	float GetTileHeight() { return m_Grid.GetTileHeight(); }
+
+	int GetLayer(glm::vec2 pos);
 
 	void SetTile(const glm::vec2& pos, TileType type);
 	std::weak_ptr<const DigDugTile> GetTile(const glm::vec2& pos) const;
@@ -49,8 +60,15 @@ public:
 	dae::Rect GetBoundaries();
 
 private:
+	std::vector<std::weak_ptr<dae::GameObject>> m_wpEnemies;
+	std::vector<std::weak_ptr<dae::GameObject>> m_wpRocks;
+	std::vector<glm::vec2> m_PookaPositions;
+	std::vector<glm::vec2> m_FygarPositions;
+	std::vector<glm::vec2> m_RockPositions;
+	glm::vec2 m_PlayerSpawnPositions[4]{};
 	std::vector<std::weak_ptr<const dae::GameObject>> m_wpPlayers;
 	dae::Grid m_Grid;
-	std::weak_ptr<LivesComponent> m_wpLivesComp;
+	std::weak_ptr<dae::GameObject> m_wpLivesDisplay;
+	std::weak_ptr<dae::GameObject> m_wpScoreDisplay;
 };
 

@@ -37,7 +37,6 @@ public:
 
 private:
 	float m_DropSpeed = 50.f;
-	int m_NrOfEnemiesHit{};
 	std::weak_ptr<dae::TransformComponent> m_wpTransformComponet;
 	std::weak_ptr<dae::ColliderComponent> m_wpColliderComponent;
 	std::weak_ptr<DigDugLevelComponent> m_wpDigDugLevelComponent;
@@ -51,7 +50,10 @@ public:
 	void Update(float deltaTime) override;
 	void Render() const override {};
 	const std::weak_ptr<DigDugLevelComponent>& GetLevel() { return m_wpLevel; };
+	int GetNrOfEnemiesKilled() { return m_NrOfEnemiesKilled; }
+	void AddEnemyKilled() { ++m_NrOfEnemiesKilled; }
 private:
+	int m_NrOfEnemiesKilled{};
 	std::weak_ptr<DigDugLevelComponent> m_wpLevel;
 	std::unique_ptr<dae::FiniteStateMachine> m_StateMachine;
 };

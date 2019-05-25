@@ -4,7 +4,7 @@
 class FygarComponent final : public DigDugEnemyComponent
 {
 public:
-	FygarComponent(std::weak_ptr<DigDugLevelComponent> wpLevel) :DigDugEnemyComponent(wpLevel) {};
+	FygarComponent(std::weak_ptr<DigDugLevelComponent> wpLevel) :DigDugEnemyComponent(wpLevel) {}
 	void Attack() override;
 	const dae::Sprite& GetWalkSprite() override { return m_WalkingSprite; }
 	const dae::Sprite& GetGhostSprite() override { return m_GhostSprite; }

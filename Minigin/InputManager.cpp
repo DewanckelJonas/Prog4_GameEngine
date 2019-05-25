@@ -35,6 +35,11 @@ bool dae::InputManager::ProcessInput()
 		}
 	}
 
+	for (auto& button : m_MouseButtonReleasedStates)
+	{
+		button.second = false;
+	}
+
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		switch(e.type)
@@ -47,10 +52,11 @@ bool dae::InputManager::ProcessInput()
 			m_MousePos.y = float(e.motion.y);
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			m_MouseButtonStates[MouseButton(e.button.button)] = true;
+			m_MouseButtonPressedStates[MouseButton(e.button.button)] = true;
 			break;
 		case SDL_MOUSEBUTTONUP:
-			m_MouseButtonStates[MouseButton(e.button.button)] = false;
+			m_MouseButtonPressedStates[MouseButton(e.button.button)] = false;
+			m_MouseButtonReleasedStates[MouseButton(e.button.button)] = true;
 			break;
 		}
 		
@@ -66,9 +72,13 @@ void dae::InputManager::Initialize()
 		m_PlayerControllers[i] = new PlayerController({}, i);
 	}
 
-	m_MouseButtonStates[MouseButton::Left] = false;
-	m_MouseButtonStates[MouseButton::Right] = false;
-	m_MouseButtonStates[MouseButton::Middle] = false;
+	m_MouseButtonPressedStates[MouseButton::Left] = false;
+	m_MouseButtonPressedStates[MouseButton::Right] = false;
+	m_MouseButtonPressedStates[MouseButton::Middle] = false;
+
+	m_MouseButtonReleasedStates[MouseButton::Left] = false;
+	m_MouseButtonReleasedStates[MouseButton::Right] = false;
+	m_MouseButtonReleasedStates[MouseButton::Middle] = false;
 }
 
 bool dae::InputManager::IsPressed(ControllerButton button, size_t controllerIdx) const
@@ -122,6 +132,11 @@ dae::PlayerController * dae::InputManager::GetPlayerControllers(size_t controlle
 
 bool dae::InputManager::IsMouseButtonPressed(MouseButton button) const
 {
-	return m_MouseButtonStates.at(button);
+	return m_MouseButtonPressedStates.at(button);
+}
+
+bool dae::InputManager::IsMouseButtonReleased(MouseButton button) const
+{
+	return m_MouseButtonReleasedStates.at(button);
 }
 

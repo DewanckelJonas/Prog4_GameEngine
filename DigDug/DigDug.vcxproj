@@ -179,6 +179,7 @@
     <ClInclude Include="PookaComponent.h" />
     <ClInclude Include="PumpComponent.h" />
     <ClInclude Include="RockComponent.h" />
+    <ClInclude Include="ScoreComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LivesComponent.cpp" />
@@ -202,6 +203,7 @@
     <ClCompile Include="PookaAI.cpp" />
     <ClCompile Include="PumpComponent.cpp" />
     <ClCompile Include="RockComponent.cpp" />
+    <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -26,11 +26,37 @@ void dae::SceneManager::FixedUpdate(float)
 
 void dae::SceneManager::Update(float deltaTime)
 {
+	m_spCurrentScene->UpdateAI();
+	if(m_NextScene)
+	{
+		SwapScene();
+	}
 	m_spCurrentScene->Update(deltaTime);
 }
 
 void dae::SceneManager::Render()
 {
 	m_spCurrentScene->Render();
+	m_HasFinishedGameLoop = true;
+}
+
+void dae::SceneManager::SetActiveScene(const std::string & name)
+{
+	if (m_spScenes[name])
+	{
+		m_NextScene = m_spScenes[name];
+	}
+	else
+	{
+		std::cout << "Level: " << name << " does not exist no new active scene set!" << std::endl;
+	}
+}
+
+void dae::SceneManager::SwapScene()
+{
+	m_spCurrentScene->CleanUp();
+	m_spCurrentScene = m_NextScene;
+	m_spCurrentScene->Initialize();
+	m_NextScene = std::shared_ptr<Scene>();
 }
 

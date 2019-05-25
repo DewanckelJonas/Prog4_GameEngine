@@ -7,8 +7,6 @@
 #include "BaseCommand.h"
 
 
-unsigned int dae::Scene::idCounter = 0;
-
 dae::Scene::Scene(const std::string& name) : m_Name(name) {}
 
 dae::Scene::~Scene()
@@ -26,19 +24,22 @@ void dae::Scene::Initialize()
 {
 }
 
-void dae::Scene::Update(float deltaTime)
+void dae::Scene::UpdateAI()
 {
-	InputManager* pInputManager = &InputManager::GetInstance();
-	CollisionSystem* pCollisionSystem = &CollisionSystem::GetInstance();
-
 	std::vector<std::weak_ptr<BaseCommand>> aiCommands;
-	if(m_wpAICommands.valid())
+	if (m_wpAICommands.valid())
 		aiCommands = m_wpAICommands.get();
 
 	for (size_t i = 0; i < aiCommands.size(); i++)
 	{
 		aiCommands[i].lock()->Execute();
 	}
+}
+
+void dae::Scene::Update(float deltaTime)
+{
+	InputManager* pInputManager = &InputManager::GetInstance();
+	CollisionSystem* pCollisionSystem = &CollisionSystem::GetInstance();
 
 	size_t nrOfControllers = pInputManager->GetMaxNrOfControllers();
 	for (size_t i = 0; i < nrOfControllers; i++)
@@ -73,4 +74,10 @@ void dae::Scene::Render() const
 		gameObject->Render();
 	}
 }
+
+void dae::Scene::CleanUp()
+{
+	m_spObjects.clear();
+}
+
 

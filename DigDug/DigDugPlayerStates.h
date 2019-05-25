@@ -54,7 +54,9 @@ public:
 	DigDugDyingState() {};
 	void Enter(const std::weak_ptr<dae::GameObject>& ) override;
 	void Exit(const std::weak_ptr < dae::GameObject > &) override {};
-	IState* Update(const std::weak_ptr<dae::GameObject>&, float) override { return new DigDugMoveState{}; };
+	IState* Update(const std::weak_ptr<dae::GameObject>&, float) override;
+private:
+	float m_RespawnTime = 0.1f;
 
 };
 

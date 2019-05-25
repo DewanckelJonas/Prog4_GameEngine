@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "RockComponent.h"
-#include "ColliderComponent.h"
-#include "TransformComponent.h"
+#include <ColliderComponent.h>
+#include <TransformComponent.h>
 #include "DigDugPlayerComponent.h"
+#include <SubjectComponent.h>
 
 RockComponent::~RockComponent()
 {
@@ -77,15 +78,15 @@ dae::IState * RockFalling::Update(const std::weak_ptr<dae::GameObject>& gameObje
 		}
 		if (collision.otherCollider->GetTag() == "Enemy" || collision.otherCollider->GetTag() == "DyingEnemy")
 		{
-			collision.otherCollider->GetGameObject().lock()->GetComponent<DigDugEnemyComponent>().lock()->Die();
-			++m_NrOfEnemiesHit;
+			collision.otherCollider->GetGameObject().lock()->Destroy();
+			gameObject.lock()->GetComponent<RockComponent>().lock()->AddEnemyKilled();
 		}
 	}
 	unsigned short row, col;
 	m_wpDigDugLevelComponent.lock()->GetTileRowCol(m_wpTransformComponet.lock()->GetPosition(), row, col);
 	if (m_wpDigDugLevelComponent.lock()->GetTile(row + 1, col).lock()->IsSolid())
 	{
-		//TODO: SEND MESSAGE TO SCORE SYSTEM THAT DOES NOT EXIST YET
+		gameObject.lock()->GetComponent<dae::SubjectComponent>().lock()->Notify("Crushed", gameObject);
 		gameObject.lock()->Destroy();
 	}
 

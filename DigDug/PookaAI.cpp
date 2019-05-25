@@ -2,6 +2,7 @@
 #include "PookaAI.h"
 #include "TransformComponent.h"
 #include "DigDugLevelComponent.h"
+#include "FygarComponent.h"
 
 void PookaAI::Initialize()
 {
@@ -27,7 +28,7 @@ std::weak_ptr<dae::BaseCommand> PookaAI::Update(float deltaTime)
 		m_Target = spLevel->GetNearestTileCenter(playerPos);
 
 		m_TimeTillFire += deltaTime;
-		if(m_TimeTillFire > m_MinTimeBetweenFire)
+		if(m_TimeTillFire > m_MinTimeBetweenFire && GetActor().lock()->GetComponent<FygarComponent>().lock())
 		{
 			unsigned short playerRow, playerCol;
 			spLevel->GetTileRowCol(playerPos, playerRow, playerCol);
@@ -122,7 +123,13 @@ std::weak_ptr<dae::BaseCommand> PookaAI::Update(float deltaTime)
 		m_spMove->SetDirection(dir);
 		if (!spLevel->GetTile(row, col).lock()->IsSolid() && m_GhostDuration > m_MinGhostDuration)
 		{
+			auto newPos = spLevel->GetNearestTileCenter(pos);
+			if(abs(newPos.x - pos.x) > 0.01f && abs(newPos.y - pos.y) > 0.01f)
+			{
+				return m_spMove;
+			}
 			m_GhostDuration = 0.f;
+
 			return m_spGhostCommand;
 		}
 	}

@@ -57,6 +57,7 @@ namespace dae
 
 		glm::vec2 GetMousePosition() { return m_MousePos; }
 		bool IsMouseButtonPressed(MouseButton button) const;
+		bool IsMouseButtonReleased(MouseButton button) const;
 
 	private:
 		//Controller and commands
@@ -69,7 +70,8 @@ namespace dae
 
 		//Mouse
 		glm::vec2 m_MousePos{};
-		std::map<MouseButton, bool> m_MouseButtonStates;
+		std::map<MouseButton, bool> m_MouseButtonPressedStates;
+		std::map<MouseButton, bool> m_MouseButtonReleasedStates;
 	};
 
 }

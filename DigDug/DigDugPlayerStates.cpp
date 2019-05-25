@@ -263,7 +263,10 @@ dae::IState * PookaDyingState::Update(const std::weak_ptr<dae::GameObject>& game
 		m_ElapsedSec = 0;
 		--m_Health;
 		if (m_Health == 0)
+		{
+			gameObject.lock()->GetComponent<dae::SubjectComponent>().lock()->Notify("Popped", gameObject);
 			gameObject.lock()->Destroy();
+		}
 	}
 	else if (m_ElapsedSec > m_DeflateTime) {
 
@@ -376,4 +379,12 @@ void EnemyFireState::Exit(const std::weak_ptr<dae::GameObject>& gameObject)
 void DigDugDyingState::Enter(const std::weak_ptr<dae::GameObject>& gameObject)
 {
 	gameObject.lock()->GetComponent<dae::SubjectComponent>().lock()->Notify("Died", gameObject);
+}
+
+dae::IState * DigDugDyingState::Update(const std::weak_ptr<dae::GameObject>&, float deltaTime)
+{
+	m_RespawnTime -= deltaTime;
+	if (m_RespawnTime < 0)
+		return new DigDugIdleState;
+	return nullptr;
 }

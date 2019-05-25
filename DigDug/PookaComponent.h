@@ -3,7 +3,7 @@
 class PookaComponent final : public DigDugEnemyComponent
 {
 public:
-	PookaComponent(std::weak_ptr<DigDugLevelComponent> wpLevel) :DigDugEnemyComponent(wpLevel) {};
+	PookaComponent(std::weak_ptr<DigDugLevelComponent> wpLevel) :DigDugEnemyComponent(wpLevel) {}
 	const dae::Sprite& GetWalkSprite() override { return m_WalkingSprite; }
 	const dae::Sprite& GetGhostSprite() override { return m_GhostSprite; }
 	const dae::Sprite& GetBlowUpSprite() override { return m_BlowUpSprite; }

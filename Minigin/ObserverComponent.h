@@ -8,9 +8,9 @@ namespace dae
 	public:
 		ObserverComponent() = default;
 		virtual ~ObserverComponent() = default;
-		void Initialize() override {}
-		void Update(float) override {}
-		void Render() const {};
+		virtual void Initialize() override {}
+		virtual void Update(float) override {}
+		virtual void Render() const {};
 		virtual void OnNotify(const std::string& event, const std::weak_ptr<GameObject>& subject) = 0;
 	};
 }
