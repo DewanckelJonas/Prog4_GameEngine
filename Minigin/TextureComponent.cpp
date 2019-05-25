@@ -4,6 +4,7 @@
 #include "Texture2D.h"
 #include "ResourceManager.h"
 #include "TransformComponent.h"
+#include <SDL.h>
 
 dae::TextureComponent::TextureComponent(const std::string& filePath, bool drawOnCenter)
 	:m_DrawOnCenter(drawOnCenter)

@@ -6,8 +6,9 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+
 #include <SDL.h>
-#include "DigDugScene.h"
+#include <vld.h>
 
 void dae::Minigin::Initialize()
 {
@@ -33,13 +34,6 @@ void dae::Minigin::Initialize()
 	InputManager::GetInstance().Initialize();
 }
 
-/**
- * Code constructing the scene world starts here
- */
-void dae::Minigin::LoadGame() const
-{
-	SceneManager::GetInstance().AddScene(new DigDugScene(), "DigDugScene");
-}
 
 void dae::Minigin::Cleanup()
 {

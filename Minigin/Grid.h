@@ -18,6 +18,8 @@ namespace dae
 
 		float GetTileWidth() const { return m_TileWidth; }
 		float GetTileHeight() const { return m_TileHeight; }
+		float GetWidth() const { return m_Width; }
+		float GetHeight() const { return m_Height; }
 
 		void Render(glm::vec2 position) const;
 		void AddTile(const std::shared_ptr<Tile>& tile);

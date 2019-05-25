@@ -11,7 +11,7 @@
 #include <glm/vec2.hpp>
 #pragma warning(pop)
 #include <memory>
-#include <SDL.h>
+#include <SDL_mouse.h>
 
 //reference: http://gameprogrammingpatterns.com/command.html
 

@@ -3,6 +3,7 @@
 #include "ResourceManager.h"
 #include "TransformComponent.h"
 #include "Renderer.h"
+#include <SDL.h>
 
 dae::SpriteComponent::SpriteComponent(const std::string & filePath, int nrOfRows, int nrOfCols, float targetWidth, float targetHeight, bool drawOnCenter)
 	: m_Sprite(dae::ResourceManager::GetInstance().LoadTexture(filePath), nrOfRows, nrOfCols)

@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "InputManager.h"
 #include "PlayerController.h"
+#include <SDL.h>
 
 dae::InputManager::~InputManager()
 {
@@ -14,7 +15,7 @@ bool dae::InputManager::ProcessInput()
 {
 	for (size_t i = 0; i < m_MaxNrOfControllers; i++)
 	{
-		if (XInputGetState(i, &m_ControllerStates[i]) == ERROR_SUCCESS) 
+		if (XInputGetState(DWORD(i), &m_ControllerStates[i]) == ERROR_SUCCESS) 
 		{
 			if (!m_IsControllerConnected[i])
 			{

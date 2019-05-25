@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 namespace dae
 {
 	class GameObject;
