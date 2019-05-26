@@ -46,10 +46,10 @@ private:
 	glm::vec2 m_Forward{ 1.f, 0.f };
 };
 
-class PookaMoveCmd final : public dae::BaseCommand
+class EnemyMoveCmd final : public dae::BaseCommand
 {
 public:
-	PookaMoveCmd(const glm::vec2& direction) : m_Direction(direction) {};
+	EnemyMoveCmd(const glm::vec2& direction) : m_Direction(direction) {};
 	void Execute() override { GetActor().lock()->GetComponent<DigDugEnemyComponent>().lock()->SetDirection(m_Direction); };
 	glm::vec2 GetDirection() const { return m_Direction; }
 	void SetDirection(const glm::vec2& direction) { m_Direction = direction; }
@@ -57,10 +57,10 @@ private:
 	glm::vec2 m_Direction;
 };
 
-class PookaGhostCommand final : public dae::BaseCommand
+class EnemyGhostCommand final : public dae::BaseCommand
 {
 public:
-	PookaGhostCommand() {};
+	EnemyGhostCommand() {};
 	void Execute() override { GetActor().lock()->GetComponent<DigDugEnemyComponent>().lock()->ToggleGhost(); }
 };
 

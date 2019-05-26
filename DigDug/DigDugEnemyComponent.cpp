@@ -36,7 +36,6 @@ void DigDugEnemyComponent::Initialize()
 
 void DigDugEnemyComponent::Update(float deltaTime)
 {
-	std::cout << m_MoveDirection.x << m_MoveDirection.y << std::endl;
 	m_StateMachine->Update(deltaTime, GetGameObject());
 	m_MoveDirection = glm::vec2{ 0,0 };
 	//Give Player The Right Transform depending on m_Forward

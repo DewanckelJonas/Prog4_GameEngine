@@ -32,9 +32,6 @@ dae::IState * DigDugMoveState::Update(const std::weak_ptr<dae::GameObject>&, flo
 	if (IsEventTriggered("Die"))
 		return new DigDugDyingState();
 
-	
-	std::cout << m_pPlayerComponent.lock()->GetForward().x << m_pPlayerComponent.lock()->GetForward().y << std::endl;
-
 	auto dir = m_pPlayerComponent.lock()->GetDirection();
 	auto pos = m_pTransformComponent.lock()->GetPosition();
 	auto tileCenter = m_pPlayerComponent.lock()->GetLevel().lock()->GetNearestTileCenter(pos);

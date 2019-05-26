@@ -71,11 +71,6 @@ void dae::Minigin::Run()
 			accuTime += deltaTime;
 			doContinue = input.ProcessInput();
 
-			while (accuTime >= msPerUpdate)
-			{
-				sceneManager.FixedUpdate(msPerUpdate);
-				accuTime -= msPerUpdate;
-			}
 			sceneManager.Update(deltaTime);
 
 			renderer.Render();

@@ -11,13 +11,100 @@
 #include <fstream>
 #include "ScoreComponent.h"
 
-DigDugLevelComponent::DigDugLevelComponent(const std::string & filePath, float width, float height, const std::weak_ptr<dae::GameObject>& livesDisplay, const std::weak_ptr<dae::GameObject>& scoreDisplay)
-	:m_Grid(filePath, width, height)
-	,m_wpLivesDisplay(livesDisplay)
+DigDugLevelComponent::DigDugLevelComponent(const std::string & filePath, float width, float height, const std::weak_ptr<dae::GameObject>& scoreDisplay)
+	:m_upGrid(std::make_unique<dae::Grid>(filePath, width, height))
 	,m_wpScoreDisplay(scoreDisplay)
 {
+	LoadEnemies(filePath);
+}
+
+DigDugLevelComponent::DigDugLevelComponent(unsigned short rows, unsigned short cols, float width, float height)
+	:m_upGrid(std::make_unique<dae::Grid>(rows, cols, width, height))
+{
+}
+
+DigDugLevelComponent::~DigDugLevelComponent()
+{
+}
+
+void DigDugLevelComponent::Initialize()
+{
+	auto spAirTile = std::make_shared<DigDugTile>(false, nullptr);
+	m_upGrid->AddTile(spAirTile); 
+	auto spGroundTexture1 = dae::ResourceManager::GetInstance().LoadTexture("GroundTileL1.png");
+	auto spGroundTileL1 = std::make_shared<DigDugTile>(true, spGroundTexture1);
+	m_upGrid->AddTile(spGroundTileL1);
+	auto spGroundTexture2 = dae::ResourceManager::GetInstance().LoadTexture("GroundTileL2.png");
+	auto spGroundTileL2 = std::make_shared<DigDugTile>(true, spGroundTexture2);
+	m_upGrid->AddTile(spGroundTileL2);
+	auto spGroundTexture3 = dae::ResourceManager::GetInstance().LoadTexture("GroundTileL3.png");
+	auto spGroundTileL3 = std::make_shared<DigDugTile>(true, spGroundTexture3);
+	m_upGrid->AddTile(spGroundTileL3);
+	auto spGroundTexture = dae::ResourceManager::GetInstance().LoadTexture("GroundTileL4.png");
+	auto spGroundTileL4 = std::make_shared<DigDugTile>(true, spGroundTexture);
+	m_upGrid->AddTile(spGroundTileL4);
+
+	
+
+	for (const glm::vec2& pos : m_RockPositions)
+	{
+		auto rock = DigDugPrefabs::CreateRock(pos, weak_from_this());
+		m_wpRocks.push_back(rock);
+		if (!m_wpScoreDisplay.expired())
+		{
+			auto scoreComp = m_wpScoreDisplay.lock()->GetComponent<ScoreComponent>();
+			rock->GetComponent<dae::SubjectComponent>().lock()->RegisterObserver(scoreComp);
+		}
+		dae::SceneManager::GetInstance().GetActiveScene().lock()->Add(rock);
+	}
+	for (const glm::vec2& pos : m_FygarPositions)
+	{
+		auto fygar = DigDugPrefabs::CreateFygar(pos, weak_from_this());
+		m_wpEnemies.push_back(fygar);
+		if (!m_wpScoreDisplay.expired())
+		{
+			auto scoreComp = m_wpScoreDisplay.lock()->GetComponent<ScoreComponent>();
+			fygar->GetComponent<dae::SubjectComponent>().lock()->RegisterObserver(scoreComp);
+		}
+		dae::SceneManager::GetInstance().GetActiveScene().lock()->Add(fygar);
+	}
+	for (const glm::vec2& pos : m_PookaPositions)
+	{
+		auto pooka = DigDugPrefabs::CreatePooka(pos, weak_from_this());
+		m_wpEnemies.push_back(pooka);
+		if (!m_wpScoreDisplay.expired())
+		{
+			auto scoreComp = m_wpScoreDisplay.lock()->GetComponent<ScoreComponent>();
+			pooka->GetComponent<dae::SubjectComponent>().lock()->RegisterObserver(scoreComp);
+		}
+		dae::SceneManager::GetInstance().GetActiveScene().lock()->Add(pooka);
+	}
+}
+
+void DigDugLevelComponent::Update(float)
+{
+	for (size_t i = 0; i < m_wpEnemies.size(); i++)
+	{
+		if(m_wpEnemies[i].expired())
+		{
+			m_wpEnemies[i] = m_wpEnemies.back();
+			m_wpEnemies.pop_back();
+			--i;
+		}
+	}
+}
+
+void DigDugLevelComponent::Render() const
+{
+	auto pos = GetGameObject().lock()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
+	m_upGrid->Render(pos);
+}
+
+
+void DigDugLevelComponent::LoadEnemies(const std::string & path)
+{
 	std::ifstream saveFile;
-	saveFile.open(filePath.c_str(), std::ios::in | std::ios::binary);
+	saveFile.open(path.c_str(), std::ios::in | std::ios::binary);
 	{
 		//skip grid part
 		short rows, cols;
@@ -61,78 +148,41 @@ DigDugLevelComponent::DigDugLevelComponent(const std::string & filePath, float w
 	saveFile.close();
 }
 
-DigDugLevelComponent::DigDugLevelComponent(unsigned short rows, unsigned short cols, float width, float height)
-	:m_Grid(rows, cols, width, height)
+void DigDugLevelComponent::Load(const std::string & path)
 {
-}
-
-DigDugLevelComponent::~DigDugLevelComponent()
-{
-}
-
-void DigDugLevelComponent::Initialize()
-{
-	for (const glm::vec2& pos : m_PookaPositions)
+	//cleanup old level
+	for (const auto& pRock : m_wpRocks)
 	{
-		auto pooka = DigDugPrefabs::CreatePooka(pos, weak_from_this(), m_wpScoreDisplay.lock()->GetComponent<ScoreComponent>());
-		m_wpEnemies.push_back(pooka);
-		dae::SceneManager::GetInstance().GetActiveScene().lock()->Add(pooka);
+		if(pRock.lock())
+		{
+			pRock.lock()->Destroy();
+		}
 	}
-	for (const glm::vec2& pos : m_FygarPositions)
+	m_wpRocks.clear();
+	for (const auto& pEnemy : m_wpEnemies)
 	{
-		auto fygar = DigDugPrefabs::CreateFygar(pos, weak_from_this(), m_wpScoreDisplay.lock()->GetComponent<ScoreComponent>());
-		m_wpEnemies.push_back(fygar);
-		dae::SceneManager::GetInstance().GetActiveScene().lock()->Add(fygar);
+		if (pEnemy.lock())
+		{
+			pEnemy.lock()->Destroy();
+		}
 	}
-	for (const glm::vec2& pos : m_RockPositions)
+	m_wpEnemies.clear();
+	m_PookaPositions.clear();
+	m_FygarPositions.clear();
+	m_RockPositions.clear();
+
+	m_upGrid = std::make_unique<dae::Grid>(path, m_upGrid->GetWidth(), m_upGrid->GetHeight());
+	LoadEnemies(path);
+	Initialize();
+	for (size_t i = 0; i < m_wpPlayers.size(); i++)
 	{
-		auto rock = DigDugPrefabs::CreateRock(pos, weak_from_this(), m_wpScoreDisplay.lock()->GetComponent<ScoreComponent>());
-		m_wpEnemies.push_back(rock);
-		dae::SceneManager::GetInstance().GetActiveScene().lock()->Add(rock);
-	}
-
-
-	auto spAirTile = std::make_shared<DigDugTile>(false, nullptr);
-	m_Grid.AddTile(spAirTile); 
-	auto spGroundTexture1 = dae::ResourceManager::GetInstance().LoadTexture("GroundTileL1.png");
-	auto spGroundTileL1 = std::make_shared<DigDugTile>(true, spGroundTexture1);
-	m_Grid.AddTile(spGroundTileL1);
-	auto spGroundTexture2 = dae::ResourceManager::GetInstance().LoadTexture("GroundTileL2.png");
-	auto spGroundTileL2 = std::make_shared<DigDugTile>(true, spGroundTexture2);
-	m_Grid.AddTile(spGroundTileL2);
-	auto spGroundTexture3 = dae::ResourceManager::GetInstance().LoadTexture("GroundTileL3.png");
-	auto spGroundTileL3 = std::make_shared<DigDugTile>(true, spGroundTexture3);
-	m_Grid.AddTile(spGroundTileL3);
-	auto spGroundTexture = dae::ResourceManager::GetInstance().LoadTexture("GroundTileL4.png");
-	auto spGroundTileL4 = std::make_shared<DigDugTile>(true, spGroundTexture);
-	m_Grid.AddTile(spGroundTileL4);
-
-
-}
-
-void DigDugLevelComponent::Render() const
-{
-	auto pos = GetGameObject().lock()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
-	m_Grid.Render(pos);
-}
-
-void DigDugLevelComponent::OnNotify(const std::string & event, const std::weak_ptr<dae::GameObject>& subject)
-{
-	if (event == "Died")
-	{
-		auto spawnPos = GetNearestTileCenter(glm::vec2{ 180.f, 20.f});
-		subject.lock()->GetComponent<dae::TransformComponent>().lock()->SetPosition({ spawnPos.x, spawnPos.y, 0 });
-	}
-	if(event == "GameOver")
-	{
-		std::cout << "Game Over" << std::endl;
-		dae::SceneManager::GetInstance().SetActiveScene("DigDugScene");
+		m_wpPlayers[i].lock()->GetComponent<dae::TransformComponent>().lock()->SetPosition({ m_PlayerSpawnPositions[i].x, m_PlayerSpawnPositions[i].y, 0 });
 	}
 }
 
 void DigDugLevelComponent::Save(const std::string & path) const
 {
-	m_Grid.SaveGrid(path);
+	m_upGrid->SaveGrid(path);
 	std::ofstream saveFile;
 	saveFile.open(path.c_str(), std::ios::out | std::ios::binary | std::ios_base::app);
 	{
@@ -201,11 +251,12 @@ void DigDugLevelComponent::SetPlayerSpawnPosition(int id, const glm::vec2 & posi
 	m_PlayerSpawnPositions[id] = alignedPos;
 }
 
+
 int DigDugLevelComponent::GetLayer(glm::vec2 pos)
 {
 	unsigned short row, col;
 	GetTileRowCol(pos, row, col);
-	auto layerSize = m_Grid.GetRows()/4;
+	auto layerSize = m_upGrid->GetRows()/4;
 	return row / layerSize;
 }
 
@@ -213,19 +264,19 @@ void DigDugLevelComponent::SetTile(const glm::vec2 & pos, TileType type)
 {
 	glm::vec2 originPos = GetGameObject().lock()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
 	unsigned short row, col;
-	m_Grid.CalculateRowCol(pos - originPos, row, col);
-	m_Grid.SetTile(unsigned char(type), row, col);
+	m_upGrid->CalculateRowCol(pos - originPos, row, col);
+	m_upGrid->SetTile(unsigned char(type), row, col);
 }
 
 glm::vec2 DigDugLevelComponent::GetNearestTileCenter(const glm::vec2 & pos) const
 {
 	glm::vec2 originPos = GetGameObject().lock()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
 	unsigned short row, col;
-	m_Grid.CalculateRowCol(pos - originPos, row, col);
+	m_upGrid->CalculateRowCol(pos - originPos, row, col);
 	
 	glm::vec2 closestCenter{};
-	closestCenter.y = (row * m_Grid.GetTileHeight() + m_Grid.GetTileHeight() / 2) + originPos.y;
-	closestCenter.x = (col * m_Grid.GetTileWidth() + m_Grid.GetTileWidth() / 2) + originPos.x;
+	closestCenter.y = (row * m_upGrid->GetTileHeight() + m_upGrid->GetTileHeight() / 2) + originPos.y;
+	closestCenter.x = (col * m_upGrid->GetTileWidth() + m_upGrid->GetTileWidth() / 2) + originPos.x;
 	return closestCenter;
 }
 
@@ -250,26 +301,26 @@ glm::vec2 DigDugLevelComponent::GetClosestPlayerPosition(const glm::vec2 & pos) 
 dae::Rect DigDugLevelComponent::GetBoundaries()
 {
 	auto pos = GetGameObject().lock()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
-	return dae::Rect{ pos, m_Grid.GetWidth(), m_Grid.GetHeight() };
+	return dae::Rect{ pos, m_upGrid->GetWidth(), m_upGrid->GetHeight() };
 }
 
 std::weak_ptr<const DigDugTile> DigDugLevelComponent::GetTile(const glm::vec2 & pos) const
 {
 	glm::vec2 originPos = GetGameObject().lock()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
 	unsigned short row, col;
-	m_Grid.CalculateRowCol(pos - originPos, row, col);
-	auto wpTile = m_Grid.GetTile(row, col);
+	m_upGrid->CalculateRowCol(pos - originPos, row, col);
+	auto wpTile = m_upGrid->GetTile(row, col);
 	return std::static_pointer_cast<const DigDugTile>(wpTile.lock());
 }
 
 std::weak_ptr<const DigDugTile> DigDugLevelComponent::GetTile(unsigned short row, unsigned short col) const
 {
-	auto wpTile = m_Grid.GetTile(row, col);
+	auto wpTile = m_upGrid->GetTile(row, col);
 	return std::static_pointer_cast<const DigDugTile>(wpTile.lock());
 }
 
 void DigDugLevelComponent::GetTileRowCol(const glm::vec2& pos, unsigned short & row, unsigned short & col) const
 {
 	glm::vec2 originPos = GetGameObject().lock()->GetComponent<dae::TransformComponent>().lock()->GetPosition();
-	m_Grid.CalculateRowCol(pos - originPos, row, col);
+	m_upGrid->CalculateRowCol(pos - originPos, row, col);
 }

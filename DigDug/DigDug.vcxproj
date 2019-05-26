@@ -85,13 +85,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glm;$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,13 +104,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glm;$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -121,7 +123,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -130,6 +132,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glm;$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -143,7 +146,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -151,7 +154,8 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\glm;$(SolutionDir)Minigin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -163,25 +167,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DigDug1PlayerScene.h" />
+    <ClInclude Include="DigDug2PlayerScene.h" />
     <ClInclude Include="DigDugEnemyComponent.h" />
     <ClInclude Include="DigDugGame.h" />
     <ClInclude Include="DigDugLevelComponent.h" />
     <ClInclude Include="DigDugPlayerComponent.h" />
     <ClInclude Include="DigDugPlayerStates.h" />
     <ClInclude Include="DigDugPrefabs.h" />
-    <ClInclude Include="DigDugScene.h" />
+    <ClInclude Include="DigDugLevelEditScene.h" />
+    <ClInclude Include="DigDugVersusScene.h" />
     <ClInclude Include="FygarComponent.h" />
     <ClInclude Include="FygarFireComponent.h" />
+    <ClInclude Include="GameSelectScene.h" />
     <ClInclude Include="LivesComponent.h" />
     <ClInclude Include="LivesDisplayComponent.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="PookaAI.h" />
+    <ClInclude Include="EnemyAI.h" />
     <ClInclude Include="PookaComponent.h" />
     <ClInclude Include="PumpComponent.h" />
     <ClInclude Include="RockComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="SPModeComponent.h" />
+    <ClInclude Include="VSModeComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DigDug1PlayerScene.cpp" />
+    <ClCompile Include="DigDug2PlayerScene.cpp" />
+    <ClCompile Include="DigDugVersusScene.cpp" />
+    <ClCompile Include="GameSelectScene.cpp" />
     <ClCompile Include="LivesComponent.cpp" />
     <ClCompile Include="LivesDisplayComponent.cpp" />
     <ClCompile Include="main.cpp" />
@@ -191,7 +205,7 @@
     <ClCompile Include="DigDugPlayerComponent.cpp" />
     <ClCompile Include="DigDugPlayerStates.cpp" />
     <ClCompile Include="DigDugPrefabs.cpp" />
-    <ClCompile Include="DigDugScene.cpp" />
+    <ClCompile Include="DigDugLevelEditScene.cpp" />
     <ClCompile Include="FygarComponent.cpp" />
     <ClCompile Include="FygarFireComponent.cpp" />
     <ClCompile Include="pch.cpp">
@@ -200,10 +214,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PookaAI.cpp" />
+    <ClCompile Include="EnemyAI.cpp" />
     <ClCompile Include="PumpComponent.cpp" />
     <ClCompile Include="RockComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="SPModeComponent.cpp" />
+    <ClCompile Include="VSModeComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

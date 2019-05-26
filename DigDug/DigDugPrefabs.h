@@ -12,9 +12,10 @@ namespace DigDugPrefabs
 {
 	std::shared_ptr<dae::GameObject> CreatePump(const glm::vec2& position, const glm::vec2& direction, const std::weak_ptr<DigDugLevelComponent>& wpLevel);
 	std::shared_ptr<dae::GameObject> CreateFire(const glm::vec2& position, const glm::vec2& direction, const std::weak_ptr<DigDugLevelComponent>& wpLevel);
-	std::shared_ptr<dae::GameObject> CreatePooka(const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel, const std::weak_ptr<ScoreComponent>& wpScore);
-	std::shared_ptr<dae::GameObject> CreateFygar(const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel, const std::weak_ptr<ScoreComponent>& wpScore);
-	std::shared_ptr<dae::GameObject> CreateRock(const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel, const std::weak_ptr<ScoreComponent>& wpScore);
-	std::shared_ptr<dae::GameObject> CreateDigDug(int playerIndex, const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel);
+	std::shared_ptr<dae::GameObject> CreatePooka(const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel);
+	std::shared_ptr<dae::GameObject> CreateFygar(const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel);
+	std::shared_ptr<dae::GameObject> CreateRock(const glm::vec2& position, const std::weak_ptr<DigDugLevelComponent> wpLevel);
+	std::shared_ptr<dae::GameObject> CreateDigDug(int playerIndex, const std::weak_ptr<DigDugLevelComponent> wpLevel);
+	std::shared_ptr<dae::GameObject> CreateFygarPlayer(int id, const std::weak_ptr<DigDugLevelComponent> wpLevel);
 }
 

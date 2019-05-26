@@ -36,13 +36,7 @@
     <ClInclude Include="DigDugPrefabs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DigDugScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FygarComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PookaAI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PookaComponent.h">
@@ -66,6 +60,30 @@
     <ClInclude Include="ScoreComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DigDugLevelEditScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DigDug1PlayerScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPModeComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DigDug2PlayerScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DigDugVersusScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VSModeComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSelectScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -86,16 +104,10 @@
     <ClCompile Include="DigDugPrefabs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DigDugScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FygarComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FygarFireComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PookaAI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PumpComponent.cpp">
@@ -117,6 +129,30 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScoreComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DigDugLevelEditScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DigDug1PlayerScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SPModeComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DigDug2PlayerScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DigDugVersusScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VSModeComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSelectScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

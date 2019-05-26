@@ -5,6 +5,7 @@
 #include "CollisionSystem.h"
 #include "AISystem.h"
 #include "BaseCommand.h"
+#include "TransformComponent.h"
 
 
 dae::Scene::Scene(const std::string& name) : m_Name(name) {}
@@ -50,7 +51,10 @@ void dae::Scene::Update(float deltaTime)
 
 	for (size_t i{}; i < m_spObjects.size(); ++i)
 	{
-		m_spObjects[i]->Update(deltaTime);
+		if (!m_spObjects[i]->IsDestroyed())
+		{
+			m_spObjects[i]->Update(deltaTime);
+		}
 	}
 	for (int i = 0; i < int(m_spObjects.size()); i++)
 	{
@@ -65,13 +69,29 @@ void dae::Scene::Update(float deltaTime)
 
 	AISystem* pAISystem = &AISystem::GetInstance();
 	m_wpAICommands = std::async(&AISystem::Update, pAISystem, deltaTime);
+
+	//Sort objects by depth
+	std::sort(m_spObjects.begin(), m_spObjects.end(), [](const std::shared_ptr<dae::GameObject> obj1, const std::shared_ptr<dae::GameObject> obj2)
+	{
+		if (!obj1->GetComponent<dae::TransformComponent>().lock())
+		{
+			return true;
+		}
+		if (!obj2->GetComponent<dae::TransformComponent>().lock())
+		{
+			return false;
+		}
+		return (obj1->GetComponent<dae::TransformComponent>().lock()->GetPosition().z > obj2->GetComponent<dae::TransformComponent>().lock()->GetPosition().z);
+	}
+	);
 }
 
 void dae::Scene::Render() const
 {
-	for (const std::shared_ptr<const GameObject>& gameObject : m_spObjects)
+	
+	for(const auto& spObject : m_spObjects)
 	{
-		gameObject->Render();
+		spObject->Render();
 	}
 }
 

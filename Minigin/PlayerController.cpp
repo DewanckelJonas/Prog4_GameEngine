@@ -21,7 +21,7 @@ void dae::PlayerController::AddCommand(dae::ControllerButton button ,const std::
 {
 	spCommand->SetActor(m_pPossesedActor);
 	m_spCommands.push_back(spCommand);
-	InputManager::GetInstance().SetCommand(button, spCommand);
+	InputManager::GetInstance().SetCommand(button, spCommand, m_ID);
 }
 
 void dae::PlayerController::RemoveCommand(dae::ControllerButton button)

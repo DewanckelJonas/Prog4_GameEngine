@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "InputManager.h"
 
 
 void dae::SceneManager::AddScene(Scene * pScene, const std::string & name)
@@ -18,10 +19,6 @@ void dae::SceneManager::AddScene(Scene * pScene, const std::string & name)
 void dae::SceneManager::Initialize()
 {
 	m_spCurrentScene->Initialize();
-}
-
-void dae::SceneManager::FixedUpdate(float)
-{
 }
 
 void dae::SceneManager::Update(float deltaTime)
@@ -54,6 +51,10 @@ void dae::SceneManager::SetActiveScene(const std::string & name)
 
 void dae::SceneManager::SwapScene()
 {
+	for (size_t i = 0; i < dae::InputManager::GetInstance().GetMaxNrOfControllers(); i++)
+	{
+		dae::InputManager::GetInstance().ClearCommands(i);
+	}
 	m_spCurrentScene->CleanUp();
 	m_spCurrentScene = m_NextScene;
 	m_spCurrentScene->Initialize();

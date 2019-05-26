@@ -12,7 +12,6 @@ namespace dae
 		void AddScene(Scene* pScene, const std::string& name);
 
 		void Initialize();
-		void FixedUpdate(float deltaTime);
 		void Update(float deltaTime);
 		void Render();
 		std::weak_ptr<Scene> GetActiveScene() { return m_spCurrentScene; };

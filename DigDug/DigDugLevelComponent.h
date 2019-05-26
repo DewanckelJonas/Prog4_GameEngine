@@ -14,7 +14,7 @@ private:
 	bool m_IsSolid;
 };
 
-class DigDugLevelComponent final : public dae::ObserverComponent, public std::enable_shared_from_this<DigDugLevelComponent>
+class DigDugLevelComponent final : public BaseComponent, public std::enable_shared_from_this<DigDugLevelComponent>
 {
 public:
 
@@ -27,17 +27,17 @@ public:
 		GroundL4
 	};
 
-	DigDugLevelComponent(const std::string& filePath, float width, float height, const std::weak_ptr<dae::GameObject>& livesDisplay, const std::weak_ptr<dae::GameObject>& scoreDisplay);
+	DigDugLevelComponent(const std::string& filePath, float width, float height, const std::weak_ptr<dae::GameObject>& scoreDisplay = std::weak_ptr<dae::GameObject>());
 	DigDugLevelComponent(unsigned short rows, unsigned short cols, float width, float height);
 	~DigDugLevelComponent();
 
 	void Initialize() override;
-	void Update(float) override {};
+	void Update(float) override;
 	void Render() const override;
 
-	void OnNotify(const std::string& event, const std::weak_ptr<dae::GameObject>& subject);
-
+	void Load(const std::string& path);
 	void Save(const std::string& path) const;
+	//Level Editing funcitons
 	void AddPookaSpawnPosition(const glm::vec2& position);
 	void AddFygarSpawnPosition(const glm::vec2 & position);
 	void AddRockSpawnPosition(const glm::vec2 & position);
@@ -45,9 +45,13 @@ public:
 	void ClearFygarSpawnPositions();
 	void ClearRockSpawnPositions();
 	void SetPlayerSpawnPosition(int id, const glm::vec2& position);
+	glm::vec2 GetPlayerSpawnPosition(int id) { return m_PlayerSpawnPositions[id]; }
 
-	float GetTileWidth() { return m_Grid.GetTileWidth(); }
-	float GetTileHeight() { return m_Grid.GetTileHeight(); }
+	int GetNrOfRemainingEnemies() { return int(m_wpEnemies.size()); }
+	void AddPlayer(const std::weak_ptr<dae::GameObject>& player) { m_wpPlayers.push_back(player); }
+
+	float GetTileWidth() { return m_upGrid->GetTileWidth(); }
+	float GetTileHeight() { return m_upGrid->GetTileHeight(); }
 
 	int GetLayer(glm::vec2 pos);
 
@@ -60,14 +64,16 @@ public:
 	dae::Rect GetBoundaries();
 
 private:
+	void LoadEnemies(const std::string& path);
+
 	std::vector<std::weak_ptr<dae::GameObject>> m_wpEnemies;
 	std::vector<std::weak_ptr<dae::GameObject>> m_wpRocks;
 	std::vector<glm::vec2> m_PookaPositions;
 	std::vector<glm::vec2> m_FygarPositions;
 	std::vector<glm::vec2> m_RockPositions;
 	glm::vec2 m_PlayerSpawnPositions[4]{};
-	std::vector<std::weak_ptr<const dae::GameObject>> m_wpPlayers;
-	dae::Grid m_Grid;
+	std::vector<std::weak_ptr<dae::GameObject>> m_wpPlayers;
+	std::unique_ptr<dae::Grid> m_upGrid;
 	std::weak_ptr<dae::GameObject> m_wpLivesDisplay;
 	std::weak_ptr<dae::GameObject> m_wpScoreDisplay;
 };

@@ -2,6 +2,7 @@ e:\programming 4\gameengine\minigin\win32\debug\minigin.pch
 e:\programming 4\gameengine\minigin\win32\debug\minigin.pdb
 e:\programming 4\gameengine\minigin\win32\debug\minigin.idb
 e:\programming 4\gameengine\minigin\win32\debug\miniginpch.obj
+e:\programming 4\gameengine\minigin\win32\debug\textcomponent.obj
 e:\programming 4\gameengine\minigin\win32\debug\spritecomponent.obj
 e:\programming 4\gameengine\minigin\win32\debug\scenemanager.obj
 e:\programming 4\gameengine\minigin\win32\debug\scene.obj
@@ -18,14 +19,12 @@ e:\programming 4\gameengine\minigin\win32\debug\collisionsystem.obj
 e:\programming 4\gameengine\minigin\win32\debug\collidercomponent.obj
 e:\programming 4\gameengine\minigin\win32\debug\tile.obj
 e:\programming 4\gameengine\minigin\win32\debug\subjectcomponent.obj
-e:\programming 4\gameengine\minigin\win32\debug\observercomponent.obj
 e:\programming 4\gameengine\minigin\win32\debug\minigin.obj
 e:\programming 4\gameengine\minigin\win32\debug\grid.obj
 e:\programming 4\gameengine\minigin\win32\debug\aisystem.obj
 e:\programming 4\gameengine\minigin\win32\debug\transformcomponent.obj
 e:\programming 4\gameengine\minigin\win32\debug\texturecomponent.obj
 e:\programming 4\gameengine\minigin\win32\debug\texture2d.obj
-e:\programming 4\gameengine\minigin\win32\debug\textcomponent.obj
 e:\programming 4\gameengine\win32\debug\minigin.lib
 e:\programming 4\gameengine\win32\debug\minigin.pdb
 e:\programming 4\gameengine\minigin\win32\debug\minigin.tlog\cl.command.1.tlog

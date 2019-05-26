@@ -9,6 +9,10 @@ namespace dae
 	public:
 		Grid(unsigned short rows, unsigned short cols, float width, float height);
 		Grid(const std::string& filePath, float width, float height);
+		Grid(const Grid& other) = delete;
+		Grid(Grid&& other) = delete;
+		Grid& operator=(const Grid& other) = delete;
+		Grid& operator=(Grid&& other) = delete;
 		~Grid();
 
 		void SetTile(unsigned char tileId, unsigned short rowIdx, unsigned short colIdx);

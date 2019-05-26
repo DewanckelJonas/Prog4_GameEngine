@@ -8,7 +8,7 @@ LivesComponent::~LivesComponent()
 
 void LivesComponent::OnNotify(const std::string & event, const std::weak_ptr<dae::GameObject>& subject)
 {
-	if(event == "Died")
+	if((event == "Died") || (event == "Popped"))
 	{
 		--m_Lives;
 		if(m_Lives < 0)
