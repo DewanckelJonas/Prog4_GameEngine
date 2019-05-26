@@ -1,7 +1,7 @@
 #include "pch.h"
 // ReSharper disable once CppUnusedIncludeDirective
 #include <vld.h>
-#include "SDL.h"
+#include <SDL.h>
 #include "DigDugGame.h"
 
 #pragma warning( push )  
